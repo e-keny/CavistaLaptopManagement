@@ -1,6 +1,7 @@
 using CavistaLaptopLifecycleManagement.Api;
 using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,11 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         options.SwaggerEndpoint("/openapi/v1.json", "API V1");
     });
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseCors(policyName);
 
