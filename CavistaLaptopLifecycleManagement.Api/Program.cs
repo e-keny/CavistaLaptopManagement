@@ -5,11 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-//builder.Services.AddAuthorization();
-
 var configuration = builder.Configuration;
 
 builder.Services.AddAuthentication()
@@ -41,6 +36,18 @@ _ = builder.Services.AddCavistaLaptopLifecycleManagementApiServices();
 
 _ = builder.Services.AddCavistaLaptopLifecycleManagementApiHandlers();
 
+var policyName = "CorsPolicy";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName, builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,6 +60,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         options.SwaggerEndpoint("/openapi/v1.json", "API V1");
     });
 }
+
+app.UseCors(policyName);
 
 _ = app.UseRouting();
 
