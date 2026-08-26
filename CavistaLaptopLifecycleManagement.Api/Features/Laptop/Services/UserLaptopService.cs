@@ -30,7 +30,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                 .Where(x => !x.IsDeprecated && x.Condition == UserLaptopCondition.Active)
                 .Select(x => new Models.UserLaptop
                 {
-                    UserID = x.Id,
+                    UserID = x.UserID,
                     AssetName = x.AssetName,
                     Model = x.Model,
                     Comment = x.Comment,
