@@ -105,6 +105,7 @@ namespace TestCavistaIdentityServer
             // add `.PersistKeysTo…()` and `.ProtectKeysWith…()` calls
             // see more at https://docs.duendesoftware.com/general/data-protection
             _ = builder.Services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo("Keys"))
                        .SetApplicationName("IdentityServer");
 
             return builder.Build();
