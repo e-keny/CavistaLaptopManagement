@@ -43,10 +43,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+var forwardedHeaderOptions = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+};
+
+// Trust all networks/proxies (Render runs behind its own load balancer)
+forwardedHeaderOptions.KnownNetworks.Clear();
+forwardedHeaderOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedHeaderOptions);
+
 
 app.UseHttpsRedirection();
 
