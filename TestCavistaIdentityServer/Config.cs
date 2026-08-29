@@ -59,7 +59,7 @@ namespace TestCavistaIdentityServer
                         AllowedGrantTypes = GrantTypes.Code,
 
                         // where to redirect to after login
-                       RedirectUris = { "https://cavistatestidentityserver.onrender.com/signout-oidc" },
+                       RedirectUris = { "https://interactivewebclient.onrender.com/signout-oidc" },
 
                        // RedirectUris = { "https://localhost:44300/signin-oidc" },
 
