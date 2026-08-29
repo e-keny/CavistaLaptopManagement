@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="CavistaLaptopLifecycleManagement.Api/CavistaLaptopLifecycleManagement.Api.csproj" />
   <Project Path="TestCavistaIdentityServer/TestCavistaIdentityServer.csproj" Id="d2d1976d-5986-4b71-9056-843af5b7f084" />
+  <Project Path="WebClient/WebClient.csproj" />
 </Solution>

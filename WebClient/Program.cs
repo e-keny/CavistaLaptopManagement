@@ -1,32 +1,56 @@
-﻿using Duende.IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 
-Console.WriteLine("Hello, World!");
+var builder = WebApplication.CreateBuilder(args);
 
-// discovery endpoints from metadata
-var client = new HttpClient();
-var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
-if (disco.IsError)
+// Add services to the container.
+builder.Services.AddRazorPages();
+
+builder.Services.AddAuthentication(options =>
 {
-    Console.WriteLine(disco.Error);
-    Console.WriteLine(disco.Exception);
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+}).AddCookie("Cookies")
+  .AddOpenIdConnect("oidc", options =>
+  {
+      options.Authority = "https://cavistatestidentityserver.onrender.com";
 
-    //return 1;
+      options.ClientId = "web";
+      options.ClientSecret = "secret";
+      options.ResponseType = "code";
+
+      options.Scope.Clear();
+      options.Scope.Add("openid");
+      options.Scope.Add("profile");
+      options.Scope.Add("scope1");
+      options.Scope.Add("scope2");
+      options.Scope.Add("verification");
+      options.ClaimActions.MapJsonKey("email_verified", "email_verified");
+      options.GetClaimsFromUserInfoEndpoint = true;
+
+      options.MapInboundClaims = false; // Don't rename claim types
+
+      options.SaveTokens = true;
+  });
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
-// request token
-var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-{
-    Address = disco.TokenEndpoint,
-    ClientId = "client",
-    ClientSecret = "secret",
-    Scope = "api1"
-});
+app.UseHttpsRedirection();
 
-if (tokenResponse.IsError)
-{
-    Console.WriteLine(tokenResponse.Error);
-    Console.WriteLine(tokenResponse.ErrorDescription);
-    //return 1;
-}
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
-Console.WriteLine(tokenResponse.AccessToken);
+app.MapStaticAssets();
+app.MapRazorPages()
+   .WithStaticAssets()
+   .RequireAuthorization(); ;
+
+app.Run();
