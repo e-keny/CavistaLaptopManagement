@@ -1,5 +1,6 @@
 using Duende.IdentityServer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Filters;
@@ -119,6 +120,17 @@ namespace TestCavistaIdentityServer
             {
                 _ = app.UseDeveloperExceptionPage();
             }
+
+            var forwardedHeaderOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+
+            // Trust all networks/proxies (Render runs behind its own load balancer)
+            forwardedHeaderOptions.KnownNetworks.Clear();
+            forwardedHeaderOptions.KnownProxies.Clear();
+
+            app.UseForwardedHeaders(forwardedHeaderOptions);
 
             _ = app.UseStaticFiles();
             _ = app.UseRouting();

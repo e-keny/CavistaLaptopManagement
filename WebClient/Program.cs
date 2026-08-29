@@ -6,32 +6,32 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = "Cookies";
-//    options.DefaultChallengeScheme = "oidc";
-//}).AddCookie("Cookies")
-//  .AddOpenIdConnect("oidc", options =>
-//  {
-//      options.Authority = "https://cavistatestidentityserver.onrender.com";
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+}).AddCookie("Cookies")
+  .AddOpenIdConnect("oidc", options =>
+  {
+      options.Authority = "https://cavistatestidentityserver.onrender.com";
 
-//      options.ClientId = "web";
-//      options.ClientSecret = "secret";
-//      options.ResponseType = "code";
+      options.ClientId = "web";
+      options.ClientSecret = "secret";
+      options.ResponseType = "code";
 
-//      options.Scope.Clear();
-//      options.Scope.Add("openid");
-//      options.Scope.Add("profile");
-//      options.Scope.Add("scope1");
-//      options.Scope.Add("scope2");
-//      options.Scope.Add("verification");
-//      options.ClaimActions.MapJsonKey("email_verified", "email_verified");
-//      options.GetClaimsFromUserInfoEndpoint = true;
+      options.Scope.Clear();
+      options.Scope.Add("openid");
+      options.Scope.Add("profile");
+      options.Scope.Add("scope1");
+      options.Scope.Add("scope2");
+      options.Scope.Add("verification");
+      options.ClaimActions.MapJsonKey("email_verified", "email_verified");
+      options.GetClaimsFromUserInfoEndpoint = true;
 
-//      options.MapInboundClaims = false; // Don't rename claim types
+      options.MapInboundClaims = false; // Don't rename claim types
 
-//      options.SaveTokens = true;
-//  });
+      options.SaveTokens = true;
+  });
 
 var app = builder.Build();
 
@@ -43,18 +43,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-var forwardedHeaderOptions = new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-};
-
-// Trust all networks/proxies (Render runs behind its own load balancer)
-forwardedHeaderOptions.KnownNetworks.Clear();
-forwardedHeaderOptions.KnownProxies.Clear();
-
-app.UseForwardedHeaders(forwardedHeaderOptions);
-
-
 app.UseHttpsRedirection();
 
 app.UseRouting();
@@ -63,7 +51,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
-   .WithStaticAssets();
-   //.RequireAuthorization(); ;
+   .WithStaticAssets()
+   .RequireAuthorization(); ;
 
 app.Run();

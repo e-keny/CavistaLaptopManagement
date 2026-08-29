@@ -30,8 +30,6 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    app.UseForwardedHeaders();
-
     if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         _ = app.Lifetime.ApplicationStopping.Register(() =>
