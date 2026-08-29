@@ -6,7 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(
+    options =>
 {
     options.DefaultScheme = "Cookies";
     options.DefaultChallengeScheme = "oidc";
@@ -14,6 +15,8 @@ builder.Services.AddAuthentication(options =>
   .AddOpenIdConnect("oidc", options =>
   {
       options.Authority = "https://cavistatestidentityserver.onrender.com";
+
+      //options.Authority = "https://localhost:5001";
 
       options.ClientId = "web";
       options.ClientSecret = "secret";
