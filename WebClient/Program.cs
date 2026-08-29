@@ -63,7 +63,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
-   .WithStaticAssets()
+   .WithStaticAssets();
    //.RequireAuthorization(); ;
 
 app.Run();
