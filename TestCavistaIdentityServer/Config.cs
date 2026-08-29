@@ -70,6 +70,9 @@ namespace TestCavistaIdentityServer
                         // where to redirect to after logout
                         PostLogoutRedirectUris = { "https://interactivewebclient.onrender.com/signout-callback-oidc" },
 
+                        RequirePkce = true,
+                        AllowOfflineAccess = true,
+
                         AllowedScopes =
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
