@@ -59,10 +59,10 @@ namespace TestCavistaIdentityServer
                         AllowedGrantTypes = GrantTypes.Code,
 
                         // where to redirect to after login
-                        RedirectUris = { "https://localhost:44300/signin-oidc" },
+                        RedirectUris = { "https://interactivewebclient.onrender.com/signin-oidc" },
 
                         // where to redirect to after logout
-                        PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
+                        PostLogoutRedirectUris = { "https://interactivewebclient.onrender.com/signout-callback-oidc" },
 
                         AllowedScopes =
                         {
