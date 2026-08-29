@@ -44,7 +44,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             CLMDbContext context,
             CancellationToken token)
         {
-            var userId = Guid.Parse("01a039b0-e899-7bd4-8fb1-623e6df449a7"); //Replace with logged in user
+            var userId = Guid.Parse("01a03ff2-37c0-7ed8-8db2-de9a8b790fbf"); //Replace with logged in user
 
             var ticketToAdd = new Database.Entities.Ticket
             {
