@@ -6,12 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.Services.AddAuthentication(
-    options =>
+try
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "oidc";
-}).AddCookie("Cookies")
+    builder.Services.AddAuthentication(
+    options =>
+    {
+        options.DefaultScheme = "Cookies";
+        options.DefaultChallengeScheme = "oidc";
+    }).AddCookie("Cookies")
   .AddOpenIdConnect("oidc", options =>
   {
       options.Authority = "https://cavistatestidentityserver.onrender.com";
@@ -35,6 +37,12 @@ builder.Services.AddAuthentication(
 
       options.SaveTokens = true;
   });
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.ToString());
+}
+
 
 var app = builder.Build();
 
