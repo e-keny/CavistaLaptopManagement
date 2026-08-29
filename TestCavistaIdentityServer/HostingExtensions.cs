@@ -56,7 +56,7 @@ namespace TestCavistaIdentityServer
                     options.Events.RaiseSuccessEvents = true;
 
                     // Use a large chunk size for diagnostic logs in development where it will be redirected to a local file
-                    if (builder.Environment.IsDevelopment())
+                    if (builder.Environment.IsDevelopment() || builder.Environment.IsProduction())
                     {
                         options.Diagnostics.ChunkSize = 1024 * 1024 * 10; // 10 MB
                     }
@@ -115,7 +115,7 @@ namespace TestCavistaIdentityServer
         {
             _ = app.UseSerilogRequestLogging();
 
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 _ = app.UseDeveloperExceptionPage();
             }
