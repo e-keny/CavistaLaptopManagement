@@ -15,15 +15,15 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Services.Configure<ForwardedHeadersOptions>(options =>
-    {
-        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    //builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    //{
+    //    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 
-        // Clear out the default known networks and proxies 
-        // so it trusts Render's internal load balancers
-        options.KnownNetworks.Clear();
-        options.KnownProxies.Clear();
-    });
+    //    // Clear out the default known networks and proxies 
+    //    // so it trusts Render's internal load balancers
+    //    options.KnownNetworks.Clear();
+    //    options.KnownProxies.Clear();
+    //});
 
     var app = builder
         .ConfigureLogging()

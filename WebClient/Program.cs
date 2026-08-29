@@ -43,7 +43,6 @@ catch (Exception ex)
     Console.WriteLine(ex.ToString());
 }
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

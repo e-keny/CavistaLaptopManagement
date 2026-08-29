@@ -61,6 +61,8 @@ namespace TestCavistaIdentityServer
                     {
                         options.Diagnostics.ChunkSize = 1024 * 1024 * 10; // 10 MB
                     }
+
+                    options.IssuerUri = "https://cavistatestidentityserver.onrender.com"; // Force HTTPS issuer
                 })
                 .AddTestUsers(TestUsers.Users)
                 .AddLicenseSummary();
@@ -108,6 +110,11 @@ namespace TestCavistaIdentityServer
             _ = builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("Keys"))
                        .SetApplicationName("IdentityServer");
+
+            builder.Services.AddHttpsRedirection(options =>
+            {
+                options.HttpsPort = 443; // Render always uses 443 for HTTPS
+            });
 
             return builder.Build();
         }
