@@ -137,6 +137,12 @@ namespace TestCavistaIdentityServer
             forwardedHeaderOptions.KnownNetworks.Clear();
             forwardedHeaderOptions.KnownProxies.Clear();
 
+            // Optional: only redirect in dev, Render already enforces HTTPS
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseForwardedHeaders(forwardedHeaderOptions);
 
             _ = app.UseStaticFiles();
