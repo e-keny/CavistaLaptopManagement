@@ -17,14 +17,14 @@
 
 <dl>
     @{
-        // if ((await HttpContext.AuthenticateAsync()).Properties != null )
-        // {
-        //     @foreach (var prop in (await HttpContext.AuthenticateAsync()).Properties.Items)
-        //     {
-        //         <dt>@prop.Key</dt>
-        //         <dd>@prop.Value</dd>
-        //     }
-        // }       
+        if ((await HttpContext.AuthenticateAsync()).Properties != null )
+        {
+            @foreach (var prop in (await HttpContext.AuthenticateAsync()).Properties.Items)
+            {
+                <dt>@prop.Key</dt>
+                <dd>@prop.Value</dd>
+            }
+        }       
     }
 
 </dl>
