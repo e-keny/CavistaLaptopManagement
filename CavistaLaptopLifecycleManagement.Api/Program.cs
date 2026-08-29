@@ -11,7 +11,7 @@ var configuration = builder.Configuration;
 builder.Services.AddAuthentication()
     .AddJwtBearer(option =>
     {
-        option.Authority = "https://localhost:5001/";
+        option.Authority = "https://cavistatestidentityserver.onrender.com/";
         option.TokenValidationParameters.ValidateAudience = false;
     });
 

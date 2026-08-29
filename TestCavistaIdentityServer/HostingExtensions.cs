@@ -21,12 +21,12 @@ namespace TestCavistaIdentityServer
                     _ = consoleLogger.WriteTo.Console(
                         outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
                         formatProvider: CultureInfo.InvariantCulture);
-                    if (builder.Environment.IsDevelopment() || builder.Environment.IsProduction())
+                    if (builder.Environment.IsDevelopment())
                     {
                         _ = consoleLogger.Filter.ByExcluding(Matching.FromSource("Duende.IdentityServer.Diagnostics.Summary"));
                     }
                 });
-                if (builder.Environment.IsDevelopment() || builder.Environment.IsProduction())
+                if (builder.Environment.IsDevelopment())
                 {
                     _ = lc.WriteTo.Logger(fileLogger =>
                     {
