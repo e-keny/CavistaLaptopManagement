@@ -14,10 +14,10 @@ namespace TestCavistaIdentityServer.Pages.Diagnostics
         public async Task<IActionResult> OnGetAsync(CancellationToken ct)
         {
             //Replace with an authorization policy check
-            if (HttpContext.Connection.IsRemote())
-            {
-                return NotFound();
-            }
+            //if (HttpContext.Connection.IsRemote())
+            //{
+            //    return NotFound();
+            //}
 
             View = new ViewModel(await HttpContext.AuthenticateAsync());
 
