@@ -11,7 +11,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     [Handler]
     [MapGet("")]
     [MapGroup<TicketMapGroup>]
-    public sealed partial class GetTickets
+    public static partial class GetTickets
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 

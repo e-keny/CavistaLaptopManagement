@@ -1,8 +1,9 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints
@@ -10,20 +11,28 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints
     [Handler]
     [MapGet("")]
     [MapGroup<UserMapGroup>]
-    public sealed partial class GetUsersQuery
+    public static partial class GetUsersQuery
     {
         public record Query;
 
-        private async static ValueTask<IEnumerable<User>> HandleAsync(
+        private async static ValueTask<Results<Ok<List<User>>, UnauthorizedHttpResult>> HandleAsync(
             Query _,
-            //UserService userService,
+            UserService userService,
             CLMDbContext context,
             CancellationToken token)
         {
-            return await context.Users
+            var user = await userService.GetCurrentUser();
+
+            if (user == null)
+            {
+                return TypedResults.Unauthorized(); ;
+            }
+
+             var result = await context.Users
             .Select(User.FromDatabaseEntity)
             .ToListAsync(token);
-            //return userService.GetUsers();
+
+            return TypedResults.Ok(result); 
         }
     }
 }

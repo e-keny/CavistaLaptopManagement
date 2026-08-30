@@ -3,6 +3,7 @@ using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -14,7 +15,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [Handler]
     [MapPost("create/{userID}")]
     [MapGroup<LaptopMapGroup>]
-    public sealed partial class CreateUserLaptop
+    public static partial class CreateUserLaptop
     {
         public sealed record CreateLaptopBody
         {
@@ -55,20 +56,26 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             public required Guid LaptopId { get; init; }
         }
 
-        private async static  ValueTask<Results<Ok<Response>, BadRequest>> HandleAsync(
+        private async static  ValueTask<Results<Ok<Response>, BadRequest, UnauthorizedHttpResult>> HandleAsync(
             Command command,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
             CLMDbContext context,
+            UserService userService,
             CancellationToken token)
         {
-            var userId = Guid.Parse("01a03ff2-37c0-7ed8-8db2-de9a8b790fbf"); //Replace with logged in user
+            var user = await userService.GetCurrentUser();
 
-            var existingUserLaptop = await userLaptopService.GetUserLaptops(command.UserID, context);
-
-            if (existingUserLaptop.Any())
+            if (user == null)
             {
-                foreach (var userLaptop in existingUserLaptop)
+                return TypedResults.Unauthorized(); ;
+            }
+
+            var existingUserLaptops = await userLaptopService.GetUserLaptops(command.UserID, context);
+
+            if (existingUserLaptops.Any())
+            {
+                foreach (var userLaptop in existingUserLaptops)
                 {
                     userLaptop.Condition = UserLaptopCondition.Inactive;
                 }
@@ -101,7 +108,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(userId, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
+                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
 
                     return TypedResults.Ok(new Response { LaptopId = laptopToAdd.Id });
                 }

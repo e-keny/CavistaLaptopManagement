@@ -61,7 +61,7 @@ namespace TestCavistaIdentityServer
                         // where to redirect to after login
                        RedirectUris = 
                         {  "http://interactivewebclient.onrender.com/signin-oidc",
-                           "http://localhost:5000/signin-oidc",          // for local dev
+                           "https://localhost:44300/signin-oidc",          // for local dev
                            "https://interactivewebclient.onrender.com/signin-oidc" // for Render deployment                               
                         },
 

@@ -14,7 +14,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     [Handler]
     [MapPost("create")]
     [MapGroup<TicketMapGroup>]
-    public sealed partial class CreateTicket
+    public static partial class CreateTicket
     {
         internal static Created<Response> TransformResult(Response response) =>
         TypedResults.Created($"/api/tickets/{response.TicketId}", response);

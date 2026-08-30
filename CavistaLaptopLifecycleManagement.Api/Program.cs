@@ -1,8 +1,13 @@
 using CavistaLaptopLifecycleManagement.Api;
 using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services.Requirements;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
+using System.Security.Claims;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,18 +16,17 @@ var configuration = builder.Configuration;
 builder.Services.AddAuthentication()
     .AddJwtBearer(option =>
     {
-        option.Authority = "https://cavistatestidentityserver.onrender.com/";
+        option.Authority = configuration["IdentityServer:Authority"];
+        //option.Authority = "https://localhost:5001";
         option.TokenValidationParameters.ValidateAudience = false;
     });
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ApiScope", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", configuration["IdentityServer:Scopes"] ?? "");
-    });
+    options.AddPolicy(Policies.ITRolePolicy, policy =>
+       policy.Requirements.Add(new ITRoleRequirement(ClaimTypes.NameIdentifier)));
 });
+
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -36,6 +40,10 @@ builder.Services.Configure<AppSettings>(
 _ = builder.Services.AddCavistaLaptopLifecycleManagementApiServices();
 
 _ = builder.Services.AddCavistaLaptopLifecycleManagementApiHandlers();
+
+_ = builder.Services.AddMemoryCache();
+
+_ = builder.Services.AddHttpContextAccessor();
 
 var policyName = "CorsPolicy";
 
@@ -55,6 +63,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.MapOpenApi();
+
+    app.MapScalarApiReference();
 
     app.UseSwaggerUI(options =>
     {
@@ -82,32 +92,4 @@ app.UseEndpoints(endpoints =>
     _ = endpoints.MapCavistaLaptopLifecycleManagementApiEndpoints();
 });
 
-var scopeRequiredByApi = app.Configuration["IdentityServer:Scopes"] ?? "";
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-{
-    //httpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
-
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.RequireAuthorization("ApiScope");
-
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

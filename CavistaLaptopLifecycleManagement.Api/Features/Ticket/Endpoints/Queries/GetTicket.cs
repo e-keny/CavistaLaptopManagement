@@ -11,7 +11,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     [Handler]
     [MapGet("{ticketId}")]
     [MapGroup<TicketMapGroup>]
-    public sealed partial class GetTicket
+    public static partial class GetTicket
     {
         public record Query([FromRoute]Guid TicketId);
 

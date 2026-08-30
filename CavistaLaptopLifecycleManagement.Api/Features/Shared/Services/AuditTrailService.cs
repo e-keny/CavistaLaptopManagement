@@ -4,26 +4,21 @@ using Immediate.Injections.Shared;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 {
-    [RegisterScoped<AuditTrailService>]
+    [RegisterScoped]
     public class AuditTrailService
     {
         public static class AuditAction
         {
             public const string Create = "Create";
-
             public const string Update = "Update";
-
             public const string Delete = "Delete";
         }
 
         public static class AuditOn
         {
             public const string Ticket = "Ticket";
-
             public const string User = "User";
-
             public const string Laptop = "Laptop";
-
             public const string LaptopHistory = "Laptop History";
         }
 

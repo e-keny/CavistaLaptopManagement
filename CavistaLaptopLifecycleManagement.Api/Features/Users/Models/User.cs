@@ -1,4 +1,6 @@
-﻿using Immediate.Apis.Shared;
+﻿using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
+using Immediate.Apis.Shared;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Text.Json;
 
@@ -7,8 +9,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
     public class User
     {
         public Guid Id { get; set; }
+
         public string? Auth0UserId { get; set; }
-        public required string EmailAddress { get; set; }
+
+        public  string? EmailAddress { get; set; }
 
         public string? FirstName { get; set; }
 
@@ -19,9 +23,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
         public string? FullName { get; set; }
 
         public bool IsActive { get; set; }
+
         public DateTimeOffset? LastLogin { get; set; }
 
-        public IReadOnlyList<string> Roles { get; set; } = [];
+        public IReadOnlyList<int> Roles { get; set; } = [];
 
         public bool Equals(User? other) =>
             other != null
@@ -42,13 +47,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 Roles = ToRoles(u.Roles),
             };
 
-        private static List<string> ToRoles(string roles)
+        private static List<int> ToRoles(string roles)
         {
             var rolesList =  !string.IsNullOrWhiteSpace(roles) ? roles : JsonSerializer.Serialize(new List<string>());
 
-            return !string.IsNullOrWhiteSpace(rolesList) ? JsonSerializer.Deserialize<List<string>>(rolesList)! : new List<string>();
-        }
-            
+            return !string.IsNullOrWhiteSpace(rolesList) ? JsonSerializer.Deserialize<List<int>>(rolesList)! : new List<int>();
+        }            
     }
 
     [RouteGroup("api/users")]
@@ -56,7 +60,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
     {
         private static void CustomizeGroup(RouteGroupBuilder group)
             => group
-                //.RequireAuthorization()
+                //.RequireAuthorization(Policies.ITRolePolicy)
+                .RequireAuthorization()
                 .WithTags("Users");
     }
 }

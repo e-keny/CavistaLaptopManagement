@@ -10,7 +10,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [Handler]
     [MapGet("")]
     [MapGroup<LaptopMapGroup>]
-    public sealed partial class GetUserLaptops
+    public static partial class GetUserLaptops
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
