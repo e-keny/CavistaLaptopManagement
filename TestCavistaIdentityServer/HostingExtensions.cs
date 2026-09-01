@@ -116,6 +116,16 @@ namespace TestCavistaIdentityServer
                 options.HttpsPort = 443; // Render always uses 443 for HTTPS
             });
 
+            _ = builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             return builder.Build();
         }
 
@@ -127,6 +137,8 @@ namespace TestCavistaIdentityServer
             {
                 _ = app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("CorsPolicy");
 
             var forwardedHeaderOptions = new ForwardedHeadersOptions
             {

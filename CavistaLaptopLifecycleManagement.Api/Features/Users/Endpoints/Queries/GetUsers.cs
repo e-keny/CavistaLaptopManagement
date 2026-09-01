@@ -15,20 +15,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints
     {
         public record Query;
 
-        private async static ValueTask<Results<Ok<List<User>>, UnauthorizedHttpResult>> HandleAsync(
+        private async static ValueTask<Results<Ok<List<User>>, BadRequest>> HandleAsync(
             Query _,
             UserService userService,
             CLMDbContext context,
             CancellationToken token)
         {
-            var user = await userService.GetCurrentUser();
-
-            if (user == null)
-            {
-                return TypedResults.Unauthorized(); ;
-            }
-
              var result = await context.Users
+                .Include(x => x.UserLaptops)
             .Select(User.FromDatabaseEntity)
             .ToListAsync(token);
 

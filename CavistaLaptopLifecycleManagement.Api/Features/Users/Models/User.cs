@@ -1,4 +1,5 @@
-﻿using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
+﻿using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
@@ -28,6 +29,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
 
         public IReadOnlyList<int> Roles { get; set; } = [];
 
+        public IReadOnlyList<UserLaptop> UserLaptops { get; set; }
+
         public bool Equals(User? other) =>
             other != null
             && Id.Equals(other.Id);
@@ -45,6 +48,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 IsActive = u.IsActive,
                 LastLogin = u.LastLogin,
                 Roles = ToRoles(u.Roles),
+                UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
+                {
+                  UserID = x.UserID,
+                    AssetName = x.AssetName,
+                    Model = x.Model,
+                    Comment = x.Comment,
+                    AssetLocation = x.AssetLocation,
+                    EmployeeDepartment = x.EmployeeDepartment,
+                    Price = x.Price
+                }).ToList()
             };
 
         private static List<int> ToRoles(string roles)
