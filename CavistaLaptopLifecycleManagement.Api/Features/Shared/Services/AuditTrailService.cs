@@ -20,6 +20,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             public const string User = "User";
             public const string Laptop = "Laptop";
             public const string LaptopHistory = "Laptop History";
+            public const string Assignability = "Assignability";
+            public const string Rapair = "Rapair";
         }
 
         private readonly CLMDbContext _context;

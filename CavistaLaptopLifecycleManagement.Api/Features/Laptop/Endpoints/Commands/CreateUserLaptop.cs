@@ -13,7 +13,7 @@ using Serilog;
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 {
     [Handler]
-    [MapPost("create/{userID}")]
+    [MapPost("create")]
     [MapGroup<LaptopMapGroup>]
     public static partial class CreateUserLaptop
     {
@@ -29,8 +29,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             public required string EmployeeDepartment { get; init; }
 
-            public required UserLaptopCondition Condition { get; init; }
-
             public required decimal Price { get; init; }
 
             public required DateTimeOffset EstimationUsefulLifeYear { get; init; }
@@ -44,8 +42,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
         public sealed record Command
         {
-            [FromRoute]
-            public required Guid UserID { get; init; }
+            //[FromRoute]
+            //public required Guid UserID { get; init; }
 
             [FromBody]
             public required CreateLaptopBody Body { get; init; }
@@ -71,27 +69,26 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 return TypedResults.Unauthorized(); ;
             }
 
-            var existingUserLaptops = await userLaptopService.GetUserLaptops(command.UserID, context);
+            //var existingUserLaptops = await userLaptopService.GetUserLaptops(command.UserID, context);
 
-            if (existingUserLaptops.Any())
-            {
-                foreach (var userLaptop in existingUserLaptops)
-                {
-                    userLaptop.Condition = UserLaptopCondition.Inactive;
-                }
-            }
+            //if (existingUserLaptops.Any())
+            //{
+            //    foreach (var userLaptop in existingUserLaptops)
+            //    {
+            //        userLaptop.Status = UserLaptopStatus.UnAssigned;
+            //    }
+            //}
 
             var requestBody = command.Body;
 
             var laptopToAdd = new Database.Entities.UserLaptop
             {
-                UserID = command.UserID,
+                //UserID = command.UserID,
                 AssetName = requestBody.AssetName,
                 Model = requestBody.Model,
                 Comment = requestBody.Comment,
                 AssetLocation = requestBody.AssetLocation,
                 EmployeeDepartment = requestBody.EmployeeDepartment,
-                Condition = requestBody.Condition,
                 Price = requestBody.Price,
                 EstimationUsefulLifeYear = requestBody.EstimationUsefulLifeYear.ToUniversalTime(),
                 DepreciationEstimationDate = requestBody.DepreciationEstimationDate.ToUniversalTime(),

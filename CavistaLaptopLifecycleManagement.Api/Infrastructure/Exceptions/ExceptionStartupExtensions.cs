@@ -28,7 +28,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Infrastructure.Exceptions
                     Status = StatusCodes.Status400BadRequest,
                 },
 
-                CLLMTemplateException ex => new()
+                CLMTemplateException ex => new()
                 {
                     Detail = ex.Message,
                     Status = ex.StatusCode,

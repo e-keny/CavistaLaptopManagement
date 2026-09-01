@@ -1,5 +1,4 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
@@ -13,7 +12,7 @@ using System.Text.Json;
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 {
     [Handler]
-    [MapPut("user/{userID}")]
+    [MapPut("/{userID}")]
     [MapGroup<UserMapGroup>]
     public static partial class UpdateUser
     {
@@ -92,7 +91,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.User, existingUser.Id);
+                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.User, existingUser.Id);
 
                     return TypedResults.Ok(new CreateUserResponse(existingUser.Id));
                 }
@@ -102,7 +101,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 Log.Error($"An error occurred => {ex.Message}");
             }
 
-            return TypedResults.BadRequest(new CreateUserResponse("No user found"));
+            return TypedResults.BadRequest(new CreateUserResponse("An error occurred"));
         }
     }
 }

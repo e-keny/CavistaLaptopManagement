@@ -5,7 +5,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 {
     public class UserLaptop
     {
-        public Guid UserID { get; set; }
+        public Guid? UserID { get; set; }
 
         public string AssetName { get; set; }
 
@@ -16,8 +16,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
         public string AssetLocation { get; set; }
 
         public string EmployeeDepartment { get; set; }
-
-        public UserLaptopCondition Condition { get; set; }
 
         public Decimal Price { get; set; }
 

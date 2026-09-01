@@ -88,11 +88,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //    }
             //};
 
-            //foreach (UserLaptop userLaptop in userLaptops)
-            //{
-            //    this.UserLaptops.Add(userLaptop);
-            //}
-            //this.SaveChanges();
+            //    foreach (UserLaptop userLaptop in userLaptops)
+            //    {
+            //        this.UserLaptops.Add(userLaptop);
+            //    }
+            //    this.SaveChanges();
+            }
         }
-    }
 }

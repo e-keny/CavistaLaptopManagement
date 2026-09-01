@@ -17,6 +17,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
         public DbSet<AuditTrail> AuditTrails { get; set; }
 
+        public DbSet<TicketHistory> TicketHistories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");

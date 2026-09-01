@@ -1,0 +1,34 @@
+﻿namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
+{
+    public class TicketHistory : BaseEntity
+    {
+        public Guid UserLaptopID { get; set; }
+
+        public Guid? TicketID { get; set; }
+
+        public Guid? LastModifiedBy { get; set; }
+
+        public DateTimeOffset ClosedAt { get; set; }
+
+        public Guid? ActionBy { get; set; }
+
+        public string? Comment { get; set; }
+
+        public Guid? AssignedTo { get; set; }
+
+        public Guid? ResolvedBy { get; set; }
+
+        public TicketHistoryStatus? TicketHistoryStatus { get; set; }
+
+        public UserLaptop UserLaptop { get; set; }
+
+        public Ticket? Ticket { get; set; }
+    }
+
+    public enum TicketHistoryStatus
+    {
+        Open,
+        Claimed,
+        Resolved
+    }
+}

@@ -4,7 +4,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 {
     public class UserLaptop : BaseEntity
     {
-        public Guid UserID { get; set; }
+        public Guid? UserID { get; set; }
 
         public string AssetName { get; set; }
 
@@ -15,8 +15,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
         public string AssetLocation { get; set; }
 
         public string EmployeeDepartment { get; set; }
-
-        public UserLaptopCondition Condition { get; set; }
 
         public Decimal Price { get; set; }
 
@@ -31,11 +29,5 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
         public User User { get; set; }
 
         public ICollection<LaptopHistory> LaptopHistories { get; set; }
-    }
-
-    public enum UserLaptopCondition
-    {
-        Inactive = 1,
-        Active
     }
 }
