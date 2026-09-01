@@ -64,7 +64,11 @@ namespace TestCavistaIdentityServer
                            "https://localhost:44300/signin-oidc",          // for local dev
                            "https://interactivewebclient.onrender.com/signin-oidc", // for Render deployment
                            "https://laptrac-woad.vercel.app/signin-oidc",
-                           "http://laptrac-woad.vercel.app/signin-oidc"
+                           "http://laptrac-woad.vercel.app/signin-oidc",
+                           "https://laptrac-woad.vercel.app/login",
+                           "http://laptrac-woad.vercel.app/login",
+                           "https://laptrac-woad.vercel.app/login/signin-oidc",
+                           "http://laptrac-woad.vercel.app/login/signin-oidc"
                         },
 
                        // RedirectUris = { "https://localhost:44300/signin-oidc" },
@@ -74,6 +78,10 @@ namespace TestCavistaIdentityServer
                             "https://interactivewebclient.onrender.com/signout-callback-oidc",
                             "https://laptrac-woad.vercel.app/signout-callback-oidc",
                             "http://laptrac-woad.vercel.app/signout-callback-oidc",
+                            "https://laptrac-woad.vercel.app/login",
+                            "http://laptrac-woad.vercel.app/login",
+                            "https://laptrac-woad.vercel.app/login/signout-callback-oidc",
+                            "http://laptrac-woad.vercel.app/login/signout-callback-oidc"
                         },
 
                         RequirePkce = true,
