@@ -4,7 +4,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 {
     public class UserLaptop : BaseEntity
     {
-        public Guid? UserID { get; set; }
+        public Guid? UserId { get; set; }
 
         public string AssetName { get; set; }
 

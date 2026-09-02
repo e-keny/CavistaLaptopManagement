@@ -26,13 +26,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
             {
                 UserLaptopID = x.UserLaptopID,
                 TicketID = x.TicketID,
-                LastModifiedBy = x.LastModifiedBy,
+               // LastModifiedBy = x.LastModifiedBy,
                 Comment = x.Comment,
                 ClosedAt = x.ClosedAt,
-                ActionBy = x.ActionBy,
-                AssignedTo = x.AssignedTo,
-                ResolvedBy = x.ResolvedBy,
-                TicketHistoryStatus = x.TicketHistoryStatus
+                //ActionBy = x.ActionBy,
+                //AssignedTo = x.AssignedTo,
+               // ResolvedBy = x.ResolvedBy,
+               // TicketHistoryStatus = x.TicketHistoryStatus
             }).ToList() : new List<TicketHistory>()
         };
     }

@@ -50,7 +50,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 Role = u.Role,
                 UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
                 {
-                  UserID = x.UserID,
+                  UserID = x.UserId,
                     AssetName = x.AssetName,
                     Model = x.Model,
                     Comment = x.Comment,

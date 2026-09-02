@@ -18,7 +18,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
 
         public async Task<IEnumerable<UserLaptop>> GetUserLaptops(Guid userId, CLMDbContext context)
         {
-            var userLaptops = await context.UserLaptops.Where(x => x.UserID == userId && !x.IsDeprecated).ToListAsync();
+            var userLaptops = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).ToListAsync();
 
             return userLaptops;
         }
@@ -50,7 +50,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                 //.Where(x => !x.IsDeprecated && x.Status == UserLaptopStatus.Assigned)
                 .Select(x => new Models.UserLaptop
                 {
-                    UserID = x.UserID,
+                    UserID = x.UserId,
                     AssetName = x.AssetName,
                     Model = x.Model,
                     Comment = x.Comment,

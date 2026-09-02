@@ -103,11 +103,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                         return TypedResults.BadRequest(new UpdateUserResponse("User not found"));
                     }
 
-                    existingLaptop.UserID = requestBody.UserID;
+                    existingLaptop.UserId = requestBody.UserID;
                 }
                 else if (requestBody.Status == UserLaptopHistoryStatus.UnAssigned)
                 {
-                    existingLaptop.UserID = null;
+                    existingLaptop.UserId = null;
                 }
             }
             else

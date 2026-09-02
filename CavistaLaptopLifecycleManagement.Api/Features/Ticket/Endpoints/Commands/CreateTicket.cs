@@ -65,7 +65,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             context.Tickets.Add(ticketToAdd);
 
             var userLaptop = await context.UserLaptops
-                .Where(x => x.UserID == currentUser.Id && !x.IsDeprecated)
+                .Where(x => x.UserId == currentUser.Id && !x.IsDeprecated)
                 .FirstOrDefaultAsync(token);
 
             if (userLaptop == null)
