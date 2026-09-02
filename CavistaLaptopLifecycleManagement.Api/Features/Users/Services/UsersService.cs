@@ -48,7 +48,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
 
         public bool IsAuthorized(Models.User user, params int[] allowedRoles)
         {
-            return allowedRoles.Any(x => user.Roles.Contains(x));
+            return allowedRoles.Any(x => user.Role.Equals(x));
         }
 
         public async Task<Database.Entities.User?> GetUser(Guid userId, CLMDbContext context)

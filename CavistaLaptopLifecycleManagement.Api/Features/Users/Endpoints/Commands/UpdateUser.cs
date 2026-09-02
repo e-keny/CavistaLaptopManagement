@@ -18,15 +18,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
     {
         public sealed record UpdateUserBody
         {
-            public required string Email { get; init; }
-
-            public required string FirstName { get; init; }
-
-            public required string LastName { get; init; }
-
-            public string? MiddleName { get; init; }
-
-            public List<Role> Role { get; init; }
+            public Role Role { get; init; }
         }
 
         public sealed record Command
@@ -80,11 +72,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 
             var requestBody = command.Body;
 
-            existingUser.EmailAddress = requestBody.Email;
-            existingUser.FirstName = requestBody.FirstName;
-            existingUser.LastName = requestBody.LastName;
-            existingUser.MiddleName = requestBody.MiddleName;
-            existingUser.Roles = JsonSerializer.Serialize(requestBody.Role);
+            existingUser.Role = requestBody.Role;
             existingUser.Modified = DateTime.UtcNow.ToUniversalTime();
 
             try

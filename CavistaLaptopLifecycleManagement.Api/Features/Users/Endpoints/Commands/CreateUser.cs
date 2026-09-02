@@ -27,7 +27,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 
             public string? MiddleName { get; init; }
 
-            public  List<Role> Role { get; init; }
+            public  Role Role { get; init; }
         }
 
         public sealed record Command
@@ -77,7 +77,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 FirstName = requestBody.FirstName,
                 LastName = requestBody.LastName,
                 MiddleName = requestBody.MiddleName,
-                Roles = JsonSerializer.Serialize(requestBody.Role),                
+                Role = requestBody.Role,                
                 Created_At = DateTime.UtcNow.ToUniversalTime(),
                 Modified = DateTime.UtcNow.ToUniversalTime()
             };

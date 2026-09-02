@@ -27,7 +27,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
 
         public DateTimeOffset? LastLogin { get; set; }
 
-        public IReadOnlyList<int> Roles { get; set; } = [];
+        public Role Role { get; set; }
 
         public IReadOnlyList<UserLaptop> UserLaptops { get; set; }
 
@@ -47,7 +47,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 EmailAddress = u.EmailAddress,
                 IsActive = u.IsActive,
                 LastLogin = u.LastLogin,
-                Roles = ToRoles(u.Roles),
+                Role = u.Role,
                 UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
                 {
                   UserID = x.UserID,

@@ -27,7 +27,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services.ClaimHand
                         Where(x => x.Auth0UserId == claimValue && !x.IsDeprecated)
                         .Select(Models.User.FromDatabaseEntity).FirstOrDefault(); ;
 
-            if (user != null && user.Roles.Where(x => x.Equals(Role.Admin.ToString())).Any())
+            if (user != null && user.Role.Equals(Role.IT))
             {
                 context.Succeed(requirement);
             }

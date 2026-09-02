@@ -2,10 +2,10 @@
 {
     public enum Role
     {
+        General,
         None,
-        Admin,
         IT,
-        General
+        Admin,
     }
 
     public class Policies

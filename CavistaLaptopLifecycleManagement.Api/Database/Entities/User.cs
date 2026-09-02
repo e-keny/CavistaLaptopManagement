@@ -1,4 +1,5 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
@@ -25,7 +26,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public DateTimeOffset? LastLogin { get; set; }
 
-        public string Roles { get; set; } = string.Empty;
+        public Role Role { get; set; }
 
         public ICollection<UserLaptop> UserLaptops { get; set; }
 
