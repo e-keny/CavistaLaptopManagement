@@ -13,13 +13,27 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public string Comment { get; set; }
 
+        public List<TicketHistory>? TicketHistory { get; set; }
+
         public static readonly Expression<Func<Database.Entities.Ticket, Ticket>> FromDatabaseEntity =
         u => new()
         {
             Id = u.Id,
             UserId = u.UserId,
-            Description = u.Description,
-            Comment = u.Comment,
+            Description = u.Description ?? string.Empty,
+            Comment = u.Comment ?? string.Empty,
+            TicketHistory = u.TicketHistories != null ? u.TicketHistories.Select(x => new TicketHistory
+            {
+                UserLaptopID = x.UserLaptopID,
+                TicketID = x.TicketID,
+                LastModifiedBy = x.LastModifiedBy,
+                Comment = x.Comment,
+                ClosedAt = x.ClosedAt,
+                ActionBy = x.ActionBy,
+                AssignedTo = x.AssignedTo,
+                ResolvedBy = x.ResolvedBy,
+                TicketHistoryStatus = x.TicketHistoryStatus
+            }).ToList() : new List<TicketHistory>()
         };
     }
 
@@ -28,7 +42,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
     {
         private static void CustomizeGroup(RouteGroupBuilder group)
             => group
-                //.RequireAuthorization()
+                .RequireAuthorization()
                 .WithTags("Tickets");
     }
 }

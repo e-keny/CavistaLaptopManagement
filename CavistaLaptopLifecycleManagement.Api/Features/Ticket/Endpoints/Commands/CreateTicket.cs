@@ -73,7 +73,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 return TypedResults.NotFound();
             }
 
-            var historyToAdd = new TicketHistory
+            var historyToAdd = new Database.Entities.TicketHistory
             {
                 UserLaptopID = userLaptop.Id,
                 TicketID = ticketToAdd.Id,

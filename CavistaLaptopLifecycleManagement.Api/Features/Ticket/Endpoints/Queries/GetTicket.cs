@@ -21,7 +21,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
             CLMDbContext context,
             CancellationToken token)
         {
-            var ticket =  await context.Tickets.Where(x => x.Id == request.TicketId).Select(Models.Ticket.FromDatabaseEntity).FirstOrDefaultAsync(token);
+            var ticket =  await context.Tickets.Where(x => x.Id == request.TicketId).Include(x => x.TicketHistories).Select(Models.Ticket.FromDatabaseEntity).FirstOrDefaultAsync(token);
 
             return ticket is not null
             ? TypedResults.Ok(ticket)

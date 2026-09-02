@@ -7,10 +7,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
         public Guid UserId { get; set; }
 
         [MaxLength(500)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
-        public TicketHistory TicketHistory { get; set; }
+        public ICollection<TicketHistory>? TicketHistories { get; set; }
     }
 }

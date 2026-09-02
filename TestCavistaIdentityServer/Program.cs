@@ -1,5 +1,4 @@
 using Duende.IdentityServer.Licensing;
-using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using System.Globalization;
 using System.Text;

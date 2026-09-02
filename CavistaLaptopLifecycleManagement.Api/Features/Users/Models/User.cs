@@ -56,7 +56,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     Comment = x.Comment,
                     AssetLocation = x.AssetLocation,
                     EmployeeDepartment = x.EmployeeDepartment,
-                    Price = x.Price
+                    Price = x.Price,
+                    EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
+                    DepreciationEstimationDate = x.DepreciationEstimationDate,
+                    WarrantyExpirationDate = x.WarrantyExpirationDate,
+                    PurchaseYear = x.PurchaseYear
                 }).ToList()
             };
 
