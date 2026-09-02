@@ -63,14 +63,8 @@ namespace TestCavistaIdentityServer
                         {  "http://interactivewebclient.onrender.com/signin-oidc",
                            "https://localhost:44300/signin-oidc",          // for local dev
                            "https://interactivewebclient.onrender.com/signin-oidc", // for Render deployment
-                           "https://laptrac-woad.vercel.app/signin-oidc",
-                           "http://laptrac-woad.vercel.app/signin-oidc",
-                           "https://laptrac-woad.vercel.app/login",
-                           "http://laptrac-woad.vercel.app/login",
-                           "https://laptrac-woad.vercel.app/login/signin-oidc",
-                           "http://laptrac-woad.vercel.app/login/signin-oidc",
-                           "http://laptrac.netlify.app/auth/callback/signin-oidc",
-                           "https://laptrac.netlify.app/auth/callback/signin-oidc"
+                           "http://laptrac.netlify.app/auth/callback",
+                           "https://laptrac.netlify.app/auth/callback"
                         },
 
                        // RedirectUris = { "https://localhost:44300/signin-oidc" },
@@ -78,14 +72,8 @@ namespace TestCavistaIdentityServer
                         // where to redirect to after logout
                         PostLogoutRedirectUris = {
                             "https://interactivewebclient.onrender.com/signout-callback-oidc",
-                            "https://laptrac-woad.vercel.app/signout-callback-oidc",
-                            "http://laptrac-woad.vercel.app/signout-callback-oidc",
-                            "https://laptrac-woad.vercel.app/login",
-                            "http://laptrac-woad.vercel.app/login",
-                            "https://laptrac-woad.vercel.app/login/signout-callback-oidc",
-                            "http://laptrac-woad.vercel.app/login/signout-callback-oidc",
-                            "https://laptrac.netlify.app/auth/callback/signout-callback-oidc",
-                            "https://laptrac.netlify.app/auth/callback/signout-callback-oidc"
+                            "https://laptrac.netlify.app/login",
+                            "http://laptrac.netlify.app/login"
                         },
 
                         RequirePkce = true,
