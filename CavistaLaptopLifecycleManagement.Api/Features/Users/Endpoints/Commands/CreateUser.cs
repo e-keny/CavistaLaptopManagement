@@ -62,7 +62,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             UserService userService,
             CancellationToken token)
         {
-            var user = await userService.GetCurrentUser();
+            var user = await userService.GetCurrentUserAsync();
 
             if (user == null)
             {
@@ -88,7 +88,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.User, userToAdd.Id);
+                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.User, userToAdd.Id);
 
                     return TypedResults.Ok(new CreateUserResponse(userToAdd.Id));
                 }

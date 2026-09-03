@@ -22,7 +22,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                        UserService userService,
             CancellationToken token)
         {
-            var currentUser = await userService.GetCurrentUser();
+            var currentUser = await userService.GetCurrentUserAsync();
 
             if (currentUser == null)
             {

@@ -16,35 +16,42 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<UserLaptop>> GetUserLaptops(Guid userId, CLMDbContext context)
+        public async Task<IEnumerable<UserLaptop>> GetUserLaptopsAsync(Guid userId, CLMDbContext context)
         {
             var userLaptops = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).ToListAsync();
 
             return userLaptops;
         }
 
-        public async Task<UserLaptop?> GetUserLaptop(Guid laptopId, CLMDbContext context)
+        public async Task<UserLaptop?> GetLaptopByUserIdAsync(Guid userId, CLMDbContext context)
+        {
+            var userLaptop = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).FirstOrDefaultAsync();
+
+            return userLaptop;
+        }
+
+        public async Task<UserLaptop?> GetUserLaptopAsync(Guid laptopId, CLMDbContext context)
         {
             var userLaptops = await context.UserLaptops.Where(x => x.Id == laptopId && !x.IsDeprecated).FirstOrDefaultAsync();
 
             return userLaptops;
         }
 
-        public async Task<User?> GetUser(Guid userId, CLMDbContext context)
+        public async Task<User?> GetUserAsync(Guid userId, CLMDbContext context)
         {
-            var userLaptops = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated).FirstOrDefaultAsync();
+            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated).FirstOrDefaultAsync();
 
-            return userLaptops;
+            return user;
         }
 
-        public async Task<LaptopHistory?> GetLaptopLastStatus(Guid laptopId, CLMDbContext context)
+        public async Task<LaptopHistory?> GetLaptopLastStatusAsync(Guid laptopId, CLMDbContext context)
         {
             var userLastLaptopHistory = await context.LaptopHistories.Where(x => x.UserLaptopID == laptopId && !x.IsDeprecated).OrderByDescending(X => X.Created_At).FirstOrDefaultAsync();
 
             return userLastLaptopHistory;
         }
 
-        public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptops(int? pageNumber = 1, int? pageSize = 10)
+        public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
         {
             var userLaptops = _context.UserLaptops                
                 //.Where(x => !x.IsDeprecated && x.Status == UserLaptopStatus.Assigned)

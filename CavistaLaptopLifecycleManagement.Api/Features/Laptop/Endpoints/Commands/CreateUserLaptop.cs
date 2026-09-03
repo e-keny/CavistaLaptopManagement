@@ -62,22 +62,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             UserService userService,
             CancellationToken token)
         {
-            var user = await userService.GetCurrentUser();
+            var user = await userService.GetCurrentUserAsync();
 
             if (user == null)
             {
                 return TypedResults.Unauthorized(); ;
             }
-
-            //var existingUserLaptops = await userLaptopService.GetUserLaptops(command.UserID, context);
-
-            //if (existingUserLaptops.Any())
-            //{
-            //    foreach (var userLaptop in existingUserLaptops)
-            //    {
-            //        userLaptop.Status = UserLaptopStatus.UnAssigned;
-            //    }
-            //}
 
             var requestBody = command.Body;
 
@@ -105,7 +95,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
+                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
 
                     return TypedResults.Ok(new Response { LaptopId = laptopToAdd.Id });
                 }

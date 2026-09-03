@@ -8,8 +8,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public Guid? TicketID { get; set; }
 
-        public string? LastModifiedBy { get; set; }
-
         public DateTimeOffset ClosedAt { get; set; }
 
         public string? ActionBy { get; set; }
@@ -24,6 +22,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public Laptop.Models.UserLaptop UserLaptop { get; set; }
 
-        public Ticket? Ticket { get; set; }
+        public DateTimeOffset Created_At { get; set; }
     }
 }

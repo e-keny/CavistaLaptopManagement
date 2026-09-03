@@ -18,9 +18,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public string? AssignedTo { get; set; }
 
-        public Guid? ResolvedBy { get; set; }
-
-        public TicketHistoryStatus? TicketHistoryStatus { get; set; }
+        public string? TicketStatus { get; set; }
 
         public List<TicketHistory> TicketHistory { get; set; }
     }

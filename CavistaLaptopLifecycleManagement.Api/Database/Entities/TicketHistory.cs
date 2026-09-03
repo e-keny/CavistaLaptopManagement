@@ -6,8 +6,6 @@
 
         public Guid? TicketID { get; set; }
 
-        public Guid? LastModifiedBy { get; set; }
-
         public DateTimeOffset ClosedAt { get; set; }
 
         public Guid? ActionBy { get; set; }

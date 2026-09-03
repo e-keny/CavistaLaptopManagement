@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
 {
-    [RegisterSingleton<UserService>]
+    [RegisterScoped]
     public class UserService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
@@ -25,7 +25,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
             this.cLMDbContext = cLMDbContext;
         }
 
-        public async ValueTask<Models.User?> GetCurrentUser()
+        public async ValueTask<Models.User?> GetCurrentUserAsync()
         {
             if (httpContextAccessor.HttpContext is { User: { } user })
             {
@@ -51,7 +51,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
             return allowedRoles.Any(x => user.Role.Equals(x));
         }
 
-        public async Task<Database.Entities.User?> GetUser(Guid userId, CLMDbContext context)
+        public async Task<Database.Entities.User?> GetUserAsync(Guid userId, CLMDbContext context)
         {
             var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated).FirstOrDefaultAsync();
 

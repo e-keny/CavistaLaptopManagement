@@ -31,7 +31,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             _context = context;
         }
 
-        public async ValueTask AddAuditTrail(Guid actionBy, string action, string actionOn, Guid actionOnId)
+        public async ValueTask AddAuditTrailAsync(Guid actionBy, string action, string actionOn, Guid actionOnId)
         {
             var auditToAdd = new AuditTrail
             {

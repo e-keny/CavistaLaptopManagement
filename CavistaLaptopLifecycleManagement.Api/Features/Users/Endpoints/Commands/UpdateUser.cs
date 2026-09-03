@@ -30,44 +30,44 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             public required UpdateUserBody Body { get; init; }
         }
 
-        public sealed record CreateUserResponse
+        public sealed record UpdateUserResponse
         {
             public Guid? userId { get; init; }
 
             public string Message { get; init; }
 
-            public CreateUserResponse(string message)
+            public UpdateUserResponse(string message)
             {
                 Message = message;
                 userId = null;
             }
 
-            public CreateUserResponse(Guid id)
+            public UpdateUserResponse(Guid id)
             {
                 Message = "successful";
                 userId = id;
             }
         }
 
-        private async static ValueTask<Results<Ok<CreateUserResponse>, BadRequest<CreateUserResponse>, UnauthorizedHttpResult>> HandleAsync(
+        private async static ValueTask<Results<Ok<UpdateUserResponse>, BadRequest<UpdateUserResponse>, UnauthorizedHttpResult>> HandleAsync(
             Command command,
             AuditTrailService auditTrailService,
             CLMDbContext context,
             UserService userService,
             CancellationToken token)
         {
-            var user = await userService.GetCurrentUser();
+            var user = await userService.GetCurrentUserAsync();
 
             if (user == null)
             {
                 return TypedResults.Unauthorized(); ;
             }
 
-            var existingUser = await userService.GetUser(command.UserID, context);
+            var existingUser = await userService.GetUserAsync(command.UserID, context);
 
             if (existingUser == null)
             {
-                return TypedResults.BadRequest(new CreateUserResponse("No user found"));
+                return TypedResults.BadRequest(new UpdateUserResponse("No user found"));
             }
 
             var requestBody = command.Body;
@@ -79,9 +79,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(user.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.User, existingUser.Id);
+                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.User, existingUser.Id);
 
-                    return TypedResults.Ok(new CreateUserResponse(existingUser.Id));
+                    return TypedResults.Ok(new UpdateUserResponse(existingUser.Id));
                 }
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 Log.Error($"An error occurred => {ex.Message}");
             }
 
-            return TypedResults.BadRequest(new CreateUserResponse("An error occurred"));
+            return TypedResults.BadRequest(new UpdateUserResponse("An error occurred"));
         }
     }
 }

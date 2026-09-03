@@ -11,6 +11,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string? Comment { get; set; }
 
+        public TicketHistoryStatus? TicketStatus { get; set; }
+
         public ICollection<TicketHistory>? TicketHistories { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             UserLaptopService userLaptopService,
             CancellationToken token)
         {
-            var userLaptop = await userLaptopService.GetUserLaptops(request.pageNumber ?? 1, request.pageSize ?? 10);
+            var userLaptop = await userLaptopService.GetUserLaptopsAsync(request.pageNumber ?? 1, request.pageSize ?? 10);
 
             return userLaptop;
         }

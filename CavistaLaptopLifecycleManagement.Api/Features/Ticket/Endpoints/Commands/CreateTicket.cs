@@ -46,7 +46,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             CLMDbContext context,
             CancellationToken token)
         {
-            var currentUser = await userService.GetCurrentUser();
+            var currentUser = await userService.GetCurrentUserAsync();
 
             if (currentUser == null)
             {
@@ -88,7 +88,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
+                    await auditTrailService.AddAuditTrailAsync(currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
 
                     return TypedResults.Ok(new Response { TicketId = ticketToAdd.Id });
                 }

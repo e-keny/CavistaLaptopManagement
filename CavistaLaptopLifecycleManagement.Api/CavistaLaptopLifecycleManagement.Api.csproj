@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Ticket\Services\" />
     <Folder Include="Infrastructure\Emails\" />
   </ItemGroup>
 

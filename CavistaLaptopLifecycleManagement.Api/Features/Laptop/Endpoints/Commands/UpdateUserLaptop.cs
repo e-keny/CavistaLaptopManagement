@@ -69,7 +69,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                 return TypedResults.BadRequest(new UpdateUserResponse("User Id must have a value"));
             }
 
-            var CurrentUser = await userService.GetCurrentUser();
+            var CurrentUser = await userService.GetCurrentUserAsync();
 
             if (CurrentUser == null)
             {
@@ -81,26 +81,33 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                 return TypedResults.BadRequest(new UpdateUserResponse("Status does not exist"));
             }
 
-            var existingLaptop = await userLaptopService.GetUserLaptop(command.laptopId, context);
+            var existingLaptop = await userLaptopService.GetUserLaptopAsync(command.laptopId, context);
 
             if (existingLaptop == null)
             {
                 return TypedResults.BadRequest(new UpdateUserResponse("Laptop not found"));
             }
 
-            var existingLastLaptopStatus = await userLaptopService.GetLaptopLastStatus(command.laptopId, context);
+            var existingLastLaptopStatus = await userLaptopService.GetLaptopLastStatusAsync(command.laptopId, context);
 
             if (existingLastLaptopStatus == null || (existingLastLaptopStatus.UserLaptopHistoryStatus != requestBody.Status))
             {
                 if (requestBody.Status == UserLaptopHistoryStatus.Assigned)
-                {
+                {                  
                     var userId = requestBody.UserID.HasValue ? requestBody.UserID.Value : Guid.Empty;
 
-                    var existingUser = await userLaptopService.GetUser(userId, context);
+                    var existingUser = await userLaptopService.GetUserAsync(userId, context);
 
                     if (existingUser == null)
                     {
                         return TypedResults.BadRequest(new UpdateUserResponse("User not found"));
+                    }
+
+                    var existingUserLaptops = await userLaptopService.GetUserLaptopsAsync(userId, context);
+
+                    if (existingUserLaptops.Any())
+                    {
+                        return TypedResults.BadRequest(new UpdateUserResponse("User currently has a laptop"));
                     }
 
                     existingLaptop.UserId = requestBody.UserID;
@@ -131,7 +138,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrail(CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Laptop, existingLaptop.Id);
+                    await auditTrailService.AddAuditTrailAsync(CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Laptop, existingLaptop.Id);
 
                     return TypedResults.Ok(new UpdateUserResponse(existingLaptop.Id));
                 }
