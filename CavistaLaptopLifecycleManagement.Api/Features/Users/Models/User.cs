@@ -1,7 +1,6 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Text.Json;
 
@@ -50,7 +49,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 Role = u.Role,
                 UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
                 {
-                  UserId = x.UserId,
+                    Id = x.Id,
+                    UserId = x.UserId,
                     AssetName = x.AssetName,
                     Model = x.Model,
                     Comment = x.Comment,
