@@ -54,16 +54,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
         public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
         {
             var userLaptops = _context.UserLaptops                
-                //.Where(x => !x.IsDeprecated && x.Status == UserLaptopStatus.Assigned)
+                .Where(x => !x.IsDeprecated)
                 .Select(x => new Models.UserLaptop
                 {
-                    UserID = x.UserId,
+                    UserId = x.UserId,
                     AssetName = x.AssetName,
                     Model = x.Model,
                     Comment = x.Comment,
                     AssetLocation = x.AssetLocation,
                     EmployeeDepartment = x.EmployeeDepartment,
-                    //Status = x.Status,
                     Price = x.Price,
                     EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
                     DepreciationEstimationDate = x.DepreciationEstimationDate,

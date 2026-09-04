@@ -26,7 +26,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
             {
                 UserLaptopID = x.UserLaptopID,
                 TicketID = x.TicketID,
-               // LastModifiedBy = x.LastModifiedBy,
                 Comment = x.Comment,
                 ClosedAt = x.ClosedAt,
                 //ActionBy = x.ActionBy,
