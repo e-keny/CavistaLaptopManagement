@@ -14,7 +14,7 @@ using Serilog;
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands
 {
     [Handler]
-    [MapPost("{ticketId}/claim-resolve")]
+    [MapPut("{ticketId}/claim-resolve")]
     [MapGroup<TicketMapGroup>]
     public static partial class UpdateTicket
     {
