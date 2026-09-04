@@ -57,8 +57,8 @@ namespace TestCavistaIdentityServer.Pages
                     new TestUser
                     {
                         SubjectId = "3",
-                        Username = "bob",
-                        Password = "bob",
+                        Username = "ekene",
+                        Password = "ekene",
                         Claims =
                         {
                             new Claim(JwtClaimTypes.Name, "Ekene Obiasogu"),
