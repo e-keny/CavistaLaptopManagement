@@ -19,6 +19,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             public const string Ticket = "Ticket";
             public const string User = "User";
             public const string Laptop = "Laptop";
+            public const string TicketComment = "Laptop";
             public const string LaptopHistory = "Laptop History";
             public const string Assignability = "Assignability";
             public const string Rapair = "Rapair";

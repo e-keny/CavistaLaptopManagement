@@ -17,7 +17,22 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
-        private async static ValueTask<Results<Ok<PaginatedList<Models.UserTicketDetail>>, BadRequest>> HandleAsync(
+        public class TicketCommentDetail
+        {
+            public Guid UserLaptopID { get; set; }
+
+            public Guid Id { get; set; }
+
+            public string? Comment { get; set; }
+
+            public string? AssignedTo { get; set; }
+
+            public string? TicketStatus { get; set; }
+
+            public List<TicketComment> Comments { get; set; }
+        }
+
+        private async static ValueTask<Results<Ok<PaginatedList<TicketCommentDetail>>, BadRequest>> HandleAsync(
             Query request,
             CLMDbContext context,
             CancellationToken token)
@@ -27,53 +42,36 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                      join user in context.Users on ticket.UserId equals user.Id
                      where !user.IsDeprecated
                      join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId
-                     select new UserTicketDetail
+                     select new TicketCommentDetail
                      {
                          UserLaptopID = userLaptop.Id,
-                         TicketID = ticket.Id,
+                         Id = ticket.Id,
                          Comment = ticket.Comment,
-                         AssignedTo = user.FirstName
+                         AssignedTo = user.FirstName,
+                         TicketStatus = ticket.TicketStatus.GetDescription()
                      };
 
-            var ticketHistoryList = await (from ticketHis in context.TicketHistories
-                                       where !ticketHis.IsDeprecated
-                                       join userLaptop in context.UserLaptops on ticketHis.UserLaptopID equals userLaptop.Id
-                                       where !userLaptop.IsDeprecated
-                                       join user in context.Users on userLaptop.UserId equals user.Id
-                                       where !user.IsDeprecated
-                                       join actionByUser in context.Users on ticketHis.ActionBy equals actionByUser.Id into lastModifyUser
-                                       from actionBy in lastModifyUser.DefaultIfEmpty()
-                                       join assignedToUser in context.Users on ticketHis.AssignedTo equals assignedToUser.Id into assignedToUser
-                                       from assignedTo in assignedToUser.DefaultIfEmpty()
-                                       join resolvedByUser in context.Users on ticketHis.ResolvedBy equals resolvedByUser.Id into resolvedByUser
-                                       from resolveBy in resolvedByUser.DefaultIfEmpty()
-                                       select new TicketHistory
-                                       {                         
-                                           TicketID = ticketHis.TicketID,
-                                           UserLaptopID = userLaptop.Id,
-                                           ClosedAt = ticketHis.ClosedAt,
-                                           ActionBy = actionBy.FullName,
-                                           AssignedTo = assignedTo.FullName,
-                                           ResolvedBy = resolveBy.FullName,
-                                           Comment = ticketHis.Comment,
-                                           TicketHistoryStatus = ticketHis.TicketHistoryStatus.HasValue ? ticketHis.TicketHistoryStatus.GetDescription() : null,
-                                           Created_At = ticketHis.Created_At
-                                       }).ToListAsync();
+            var ticketCommentList = await (from ticketComment in context.TicketComments
+                                           where !ticketComment.IsDeprecated
+                                           join user in context.Users on ticketComment.AuthorId equals user.Id
+                                           where !user.IsDeprecated                                           
+                                           select new TicketComment
+                                           {
+                                               Id = ticketComment.Id,
+                                               TicketId = ticketComment.TicketId,
+                                               AuthorName = user.FullName,
+                                               AuthorEmail = user.EmailAddress,
+                                               Message = ticketComment.Comment,                                               
+                                               CreatedAt = ticketComment.Created_At
+                                           }).ToListAsync();
 
-            var historyLookUp = ticketHistoryList.ToLookup(x => x.TicketID);
+            var commentLookUp = ticketCommentList.ToLookup(x => x.TicketId);
 
-            var pagedResult = await PaginatedList<UserTicketDetail>.CreateAsync(userTicketList, request.pageNumber ?? 1, request.pageSize ?? 10);
+            var pagedResult = await PaginatedList<TicketCommentDetail>.CreateAsync(userTicketList, request.pageNumber ?? 1, request.pageSize ?? 10);
 
             foreach (var result in pagedResult.Item)
-            {
-                var lastHistory = historyLookUp[result.TicketID].OrderByDescending(x => x.Created_At).FirstOrDefault();
-
-                if (lastHistory != null)
-                {
-                    result.TicketStatus = lastHistory.TicketHistoryStatus;
-                }
-                
-                result.TicketHistory = historyLookUp[result.TicketID].ToList();
+            {                         
+                result.Comments = commentLookUp[result.Id].OrderBy(x => x.CreatedAt).ToList();
             }
 
             return TypedResults.Ok(pagedResult);

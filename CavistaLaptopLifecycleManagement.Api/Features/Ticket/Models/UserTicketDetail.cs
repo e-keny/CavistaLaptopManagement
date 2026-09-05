@@ -6,7 +6,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
     {
         public Guid UserLaptopID { get; set; }
 
-        public Guid? TicketID { get; set; }
+        public Guid Id { get; set; }
 
         public Guid? LastModifiedBy { get; set; }
 
@@ -20,6 +20,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public string? TicketStatus { get; set; }
 
-        public List<TicketHistory> TicketHistory { get; set; }
+        public List<TicketComment> Comments { get; set; }
     }
 }

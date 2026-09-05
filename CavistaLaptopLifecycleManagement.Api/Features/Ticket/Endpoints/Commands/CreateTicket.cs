@@ -17,7 +17,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     [MapGroup<TicketMapGroup>]
     public static partial class CreateTicket
     {
-        internal static Created<Response> TransformResult(Response response) =>
+        internal static Created<CreateTicketResponse> TransformResult(CreateTicketResponse response) =>
         TypedResults.Created($"/api/tickets/{response.TicketId}", response);
 
         public sealed record CreateTicketBody
@@ -33,15 +33,29 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             public required CreateTicketBody Body { get; init; }
         }
 
-        public sealed record Response
+        public sealed record CreateTicketResponse
         {
-            public required Guid TicketId { get; init; }
+            public Guid? TicketId { get; init; }
+
+            public string? Message { get; init; }
+
+            public CreateTicketResponse(string message)
+            {
+                Message = message;
+                TicketId = null;
+            }
+
+            public CreateTicketResponse(Guid id)
+            {
+                Message = "successful";
+                TicketId = id;
+            }
         }
 
-        private async static ValueTask<Results<Ok<Response>, BadRequest, NotFound, UnauthorizedHttpResult>> HandleAsync(
+
+        private async static ValueTask<Results<Ok<CreateTicketResponse>, BadRequest<CreateTicketResponse>, NotFound<CreateTicketResponse>, UnauthorizedHttpResult>> HandleAsync(
             Command request,
-             //UserLaptopService userLaptopService,
-             UserService userService,
+            UserService userService,
             AuditTrailService auditTrailService,
             CLMDbContext context,
             CancellationToken token)
@@ -70,7 +84,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
 
             if (userLaptop == null)
             {
-                return TypedResults.NotFound();
+                return TypedResults.NotFound(new CreateTicketResponse("Laptop not found for this user"));
             }
 
             var historyToAdd = new Database.Entities.TicketHistory
@@ -90,7 +104,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 {
                     await auditTrailService.AddAuditTrailAsync(currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
 
-                    return TypedResults.Ok(new Response { TicketId = ticketToAdd.Id });
+                    return TypedResults.Ok(new CreateTicketResponse(ticketToAdd.Id));
                 }
             }
             catch (Exception ex)
@@ -98,8 +112,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 Log.Error($"An error occurred => {ex.Message}");
             }
 
-            return TypedResults.BadRequest();
+            return TypedResults.BadRequest(new CreateTicketResponse("Failed to create ticket"));
         }
-
     }
 }

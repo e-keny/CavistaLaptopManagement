@@ -17,7 +17,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
         private async static ValueTask<Results<Ok<Models.Ticket>, NotFound>> HandleAsync(
             Query request,
-            //UserService userService,
             CLMDbContext context,
             CancellationToken token)
         {

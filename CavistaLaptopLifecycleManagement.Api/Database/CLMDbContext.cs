@@ -19,6 +19,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
         public DbSet<TicketHistory> TicketHistories { get; set; }
 
+        public DbSet<TicketComment> TicketComments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
