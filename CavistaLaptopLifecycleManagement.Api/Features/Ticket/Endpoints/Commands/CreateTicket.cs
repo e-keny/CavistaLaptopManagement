@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands
 {
@@ -17,13 +18,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     [MapGroup<TicketMapGroup>]
     public static partial class CreateTicket
     {
-        internal static Created<CreateTicketResponse> TransformResult(CreateTicketResponse response) =>
-        TypedResults.Created($"/api/tickets/{response.TicketId}", response);
-
         public sealed record CreateTicketBody
         {
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Description is required")]
             public required string Description { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Comment is required")]
             public required string Comment { get; init; }
         }
 

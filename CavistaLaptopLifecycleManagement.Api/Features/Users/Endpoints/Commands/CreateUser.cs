@@ -8,6 +8,7 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
@@ -19,10 +20,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
     {
         public sealed record CreateUserBody
         {
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required")]
             public required string Email { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "FirstName is required")]
             public required string FirstName { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "LastName is required")]
             public required string LastName { get; init; }
 
             public string? MiddleName { get; init; }

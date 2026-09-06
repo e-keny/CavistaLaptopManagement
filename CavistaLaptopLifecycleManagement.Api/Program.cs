@@ -3,6 +3,7 @@ using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services.Requirements;
+using CavistaLaptopLifecycleManagement.Api.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -44,6 +45,8 @@ _ = builder.Services.AddCavistaLaptopLifecycleManagementApiHandlers();
 _ = builder.Services.AddMemoryCache();
 
 _ = builder.Services.AddHttpContextAccessor();
+
+_ = builder.Services.AddProblemDetails(ExceptionStartupExtensions.ConfigureProblemDetails);
 
 var policyName = "CorsPolicy";
 

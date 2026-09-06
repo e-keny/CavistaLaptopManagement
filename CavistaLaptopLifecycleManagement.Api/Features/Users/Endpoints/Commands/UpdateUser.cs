@@ -70,6 +70,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 return TypedResults.BadRequest(new UpdateUserResponse("No user found"));
             }
 
+            if (existingUser.Role == command.Body.Role) return TypedResults.BadRequest(new UpdateUserResponse("User already has this role"));
+
             var requestBody = command.Body;
 
             existingUser.Role = requestBody.Role;

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands
 {
@@ -19,6 +20,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     {
         public sealed record AddTicketcommentBody
         {
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Message is required")]
             public required string Message { get; init; }
         }
 

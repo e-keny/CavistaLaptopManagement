@@ -9,6 +9,7 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 {
@@ -19,16 +20,22 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     {
         public sealed record CreateLaptopBody
         {
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Asset name is required")]
             public required string AssetName { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Model is required")]
             public required string Model { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Comment is required")]
             public required string Comment { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Asset location is required")]
             public required string AssetLocation { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Employee department is required")]
             public required string EmployeeDepartment { get; init; }
 
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Price is required")]
             public required decimal Price { get; init; }
 
             public required DateTimeOffset EstimationUsefulLifeYear { get; init; }
@@ -42,9 +49,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
         public sealed record Command
         {
-            //[FromRoute]
-            //public required Guid UserID { get; init; }
-
             [FromBody]
             public required CreateLaptopBody Body { get; init; }
         }
@@ -73,7 +77,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             var laptopToAdd = new Database.Entities.UserLaptop
             {
-                //UserID = command.UserID,
                 AssetName = requestBody.AssetName,
                 Model = requestBody.Model,
                 Comment = requestBody.Comment,
@@ -87,7 +90,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 Created_At = DateTime.UtcNow.ToUniversalTime(),
                 Modified = DateTime.UtcNow.ToUniversalTime()
             };
-
 
             context.UserLaptops.Add(laptopToAdd);
 
