@@ -3,7 +3,6 @@
     public enum Role
     {
         General,
-        None,
         IT,
         Admin,
     }

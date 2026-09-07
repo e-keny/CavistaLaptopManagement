@@ -58,6 +58,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             Command command,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
+            NotificationService notificationService,
             CLMDbContext context,
             UserService userService,
             CancellationToken token)
@@ -107,7 +108,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
                     if (existingUserLaptops.Any())
                     {
-                        return TypedResults.BadRequest(new UpdateUserResponse("User currently has a laptop"));
+                        return TypedResults.BadRequest(new UpdateUserResponse("User currently has a laptop, please first unassign the current one"));
                     }
 
                     existingLaptop.UserId = requestBody.UserID;
@@ -134,12 +135,19 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
             context.LaptopHistories.Add(lapTopHistoryToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Laptop, existingLaptop.Id);
+
+            if (requestBody.UserID.HasValue)
+            {
+                var notificationMessage = $"{existingLaptop.AssetName} has been assigned to you";
+
+                await notificationService.NotifyUser(context, requestBody.UserID.Value, notificationMessage);
+            }
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {
-                    await auditTrailService.AddAuditTrailAsync(CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Laptop, existingLaptop.Id);
-
+                {                   
                     return TypedResults.Ok(new UpdateUserResponse(existingLaptop.Id));
                 }
             }

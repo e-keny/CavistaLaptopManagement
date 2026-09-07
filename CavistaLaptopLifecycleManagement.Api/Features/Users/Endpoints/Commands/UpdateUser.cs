@@ -77,12 +77,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             existingUser.Role = requestBody.Role;
             existingUser.Modified = DateTime.UtcNow.ToUniversalTime();
 
+            await auditTrailService.AddAuditTrailAsync(context, user.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.User, existingUser.Id);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.User, existingUser.Id);
-
                     return TypedResults.Ok(new UpdateUserResponse(existingUser.Id));
                 }
             }

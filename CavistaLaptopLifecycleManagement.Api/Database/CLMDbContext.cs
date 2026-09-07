@@ -21,6 +21,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
         public DbSet<TicketComment> TicketComments { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");

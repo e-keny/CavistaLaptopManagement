@@ -93,12 +93,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             context.UserLaptops.Add(laptopToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
-
                     return TypedResults.Ok(new Response { LaptopId = laptopToAdd.Id });
                 }
             }

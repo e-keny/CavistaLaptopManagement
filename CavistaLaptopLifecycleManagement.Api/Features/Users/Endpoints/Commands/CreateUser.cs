@@ -88,12 +88,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 
             context.Users.Add(userToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.User, userToAdd.Id);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrailAsync(user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.User, userToAdd.Id);
-
                     return TypedResults.Ok(new CreateUserResponse(userToAdd.Id));
                 }
             }

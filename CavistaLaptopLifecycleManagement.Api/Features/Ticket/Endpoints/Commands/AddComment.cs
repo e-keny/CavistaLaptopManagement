@@ -86,12 +86,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
 
             context.TicketComments.Add(ticketCommentToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.TicketComment, ticketCommentToAdd.Id);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {
-                    await auditTrailService.AddAuditTrailAsync(currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.TicketComment, ticketCommentToAdd.Id);
-
+                {   
                     return TypedResults.Ok(new AddTicketCommentResponse(ticketCommentToAdd.Id));
                 }
             }

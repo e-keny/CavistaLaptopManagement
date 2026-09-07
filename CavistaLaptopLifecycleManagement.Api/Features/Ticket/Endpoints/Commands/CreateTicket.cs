@@ -57,6 +57,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             Command request,
             UserService userService,
             AuditTrailService auditTrailService,
+            NotificationService notificationService,
             CLMDbContext context,
             CancellationToken token)
         {
@@ -98,12 +99,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
 
             context.TicketHistories.Add(historyToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
+
+            var notificationMessage = $"There is an available ticket waiting to be treated";
+
+            await notificationService.NotifyIT(context, notificationMessage);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    await auditTrailService.AddAuditTrailAsync(currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
-
                     return TypedResults.Ok(new CreateTicketResponse(ticketToAdd.Id));
                 }
             }

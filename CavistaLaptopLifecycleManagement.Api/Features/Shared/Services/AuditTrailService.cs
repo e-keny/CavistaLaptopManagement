@@ -25,14 +25,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             public const string Rapair = "Rapair";
         }
 
-        private readonly CLMDbContext _context;
-
-        public AuditTrailService(CLMDbContext context)
-        {
-            _context = context;
-        }
-
-        public async ValueTask AddAuditTrailAsync(Guid actionBy, string action, string actionOn, Guid actionOnId)
+        public async ValueTask AddAuditTrailAsync(CLMDbContext context, Guid actionBy, string action, string actionOn, Guid actionOnId)
         {
             var auditToAdd = new AuditTrail
             {
@@ -44,9 +37,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 ActionAt = DateTime.UtcNow
             };
 
-            _context.AuditTrails.Add(auditToAdd);
-
-            await _context.SaveChangesAsync();
+            context.AuditTrails.Add(auditToAdd);
         }
     }
 }

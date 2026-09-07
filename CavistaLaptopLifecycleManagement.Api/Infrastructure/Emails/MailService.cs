@@ -1,14 +1,16 @@
-﻿using Immediate.Injections.Shared;
-using Microsoft.Extensions.Options;
-using MimeKit;
+﻿using CavistaLaptopLifecycleManagement.Api.Features.Shared;
+using Immediate.Injections.Shared;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
+using MimeKit;
 using Serilog;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
+namespace CavistaLaptopLifecycleManagement.Api.Infrastructure.Emails
 {
+
     [RegisterScoped]
     public class MailService
     {

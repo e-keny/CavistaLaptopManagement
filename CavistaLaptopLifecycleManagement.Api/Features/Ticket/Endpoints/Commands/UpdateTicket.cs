@@ -61,6 +61,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             UserService userService,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
+            NotificationService notificationService,
             CLMDbContext context,
             CancellationToken token)
         {
@@ -109,24 +110,34 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 Modified = DateTime.UtcNow,
             };
 
+            string notificationMessage = string.Empty;
+
             if (requestBody.TicketHistoryStatus == TicketHistoryStatus.Resolved)
             {
                 ticketHistoryToAdd.ClosedAt = DateTime.UtcNow;
                 ticketHistoryToAdd.ResolvedBy = CurrentUser.Id;
+                notificationMessage = $"Ticket was resolved by {CurrentUser.FullName}";
             }
             else if (requestBody.TicketHistoryStatus == TicketHistoryStatus.Claimed)
             {
                 ticketHistoryToAdd.AssignedTo = CurrentUser.Id;
+                notificationMessage = $"Ticket was claimed by {CurrentUser.FullName}";
+            }
+            else
+            {
+                notificationMessage = $"Ticket was re-opened by {CurrentUser.FullName}";
             }
 
             context.TicketHistories.Add(ticketHistoryToAdd);
 
+            await auditTrailService.AddAuditTrailAsync(context, CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Ticket, existingTicket.Id);
+
+            await notificationService.NotifyUser(context, existingTicket.UserId, notificationMessage);
+
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {
-                    await auditTrailService.AddAuditTrailAsync(CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Ticket, existingTicket.Id);
-
+                {                  
                     return TypedResults.Ok(new UpdateTicketResponse(existingTicket.Id));
                 }
             }
