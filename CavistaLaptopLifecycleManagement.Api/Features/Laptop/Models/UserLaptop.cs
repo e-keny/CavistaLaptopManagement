@@ -1,5 +1,4 @@
-﻿using CavistaLaptopLifecycleManagement.Api.Database.Entities;
-using Immediate.Apis.Shared;
+﻿using Immediate.Apis.Shared;
 using System.Linq.Expressions;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
@@ -19,6 +18,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public string EmployeeDepartment { get; set; }
 
+        public string AssignedToName { get; set; }
+
+        public string AssignedToEmail { get; set; }
+
+        public string? status { get; set; }
+
         public Decimal Price { get; set; }
 
         public DateTimeOffset? EstimationUsefulLifeYear { get; set; }
@@ -28,6 +33,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
         public DateTimeOffset? WarrantyExpirationDate { get; set; }
 
         public DateTimeOffset? PurchaseYear { get; set; }
+
+        public List<LaptopHistory> LaptopHistories { get; set; }
 
         public static readonly Expression<Func<Database.Entities.UserLaptop, UserLaptop>> FromDatabaseEntity =
         u => new()

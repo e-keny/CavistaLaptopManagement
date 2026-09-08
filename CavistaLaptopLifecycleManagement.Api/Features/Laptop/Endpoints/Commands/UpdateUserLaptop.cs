@@ -112,10 +112,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                     }
 
                     existingLaptop.UserId = requestBody.UserID;
+                    existingLaptop.UserLaptopStatus = requestBody.Status;
                 }
                 else if (requestBody.Status == UserLaptopHistoryStatus.UnAssigned)
                 {
                     existingLaptop.UserId = null;
+                    existingLaptop.UserLaptopStatus = UserLaptopHistoryStatus.UnAssigned;
                 }
             }
             else
@@ -123,7 +125,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                 return TypedResults.NoContent();
             }
 
-            var lapTopHistoryToAdd = new LaptopHistory
+            var lapTopHistoryToAdd = new Database.Entities.LaptopHistory
             {
                 UserLaptopID = existingLaptop.Id,
                 UserLaptopHistoryStatus = requestBody.Status,

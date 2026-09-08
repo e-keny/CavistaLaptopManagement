@@ -1,15 +1,13 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 {
@@ -18,15 +16,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
     [MapGroup<UserMapGroup>]
     public static partial class CreateUser
     {
-        public sealed record CreateUserBody
+        [Validate]
+        public sealed partial record CreateUserBody : IValidationTarget<CreateUserBody>
         {
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required")]
+            [NotEmpty]
             public required string Email { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "FirstName is required")]
+            [NotEmpty]
             public required string FirstName { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "LastName is required")]
+            [NotEmpty]
             public required string LastName { get; init; }
 
             public string? MiddleName { get; init; }
@@ -34,7 +33,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
             public  Role Role { get; init; }
         }
 
-        public sealed record Command
+        [Validate]
+        public sealed partial record Command : IValidationTarget<Command>
         {
             [FromBody]
             public required CreateUserBody Body { get; init; }

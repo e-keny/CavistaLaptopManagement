@@ -1,11 +1,11 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -18,36 +18,38 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [MapGroup<LaptopMapGroup>]
     public static partial class CreateUserLaptop
     {
-        public sealed record CreateLaptopBody
+        [Validate]
+        public sealed partial record CreateLaptopBody : IValidationTarget<CreateLaptopBody>
         {
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Asset name is required")]
+            [NotEmpty]
             public required string AssetName { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Model is required")]
+            [NotEmpty]
             public required string Model { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Comment is required")]
+            [NotEmpty]
             public required string Comment { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Asset location is required")]
+            [NotEmpty]
             public required string AssetLocation { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Employee department is required")]
+            [NotEmpty]
             public required string EmployeeDepartment { get; init; }
 
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Price is required")]
+            [NotEmpty]
             public required decimal Price { get; init; }
 
-            public required DateTimeOffset EstimationUsefulLifeYear { get; init; }
+            public  DateTimeOffset EstimationUsefulLifeYear { get; init; }
 
-            public required DateTimeOffset DepreciationEstimationDate { get; init; }
+            public  DateTimeOffset DepreciationEstimationDate { get; init; }
 
-            public required DateTimeOffset WarrantyExpirationDate { get; init; }
+            public  DateTimeOffset WarrantyExpirationDate { get; init; }
 
-            public required DateTimeOffset PurchaseYear { get; init; }
+            public  DateTimeOffset PurchaseYear { get; init; }
         }
 
-        public sealed record Command
+        [Validate]
+        public sealed partial record Command : IValidationTarget<Command>
         {
             [FromBody]
             public required CreateLaptopBody Body { get; init; }

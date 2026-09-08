@@ -1,15 +1,14 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands
 {
@@ -18,13 +17,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     [MapGroup<TicketMapGroup>]
     public static partial class AddComment
     {
-        public sealed record AddTicketcommentBody
+        [Validate]
+        public sealed partial record AddTicketcommentBody : IValidationTarget<AddTicketcommentBody>
         {
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Message is required")]
+            [NotEmpty]
             public required string Message { get; init; }
         }
 
-        public sealed record Command
+        [Validate]
+        public sealed partial record Command : IValidationTarget<Command>
         {
             [FromRoute]
             public required Guid TicketId { get; init; }

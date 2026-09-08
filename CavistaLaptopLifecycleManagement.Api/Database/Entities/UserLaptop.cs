@@ -16,6 +16,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string EmployeeDepartment { get; set; }
 
+        public UserLaptopHistoryStatus UserLaptopStatus { get; set; }
+
         public Decimal Price { get; set; }
 
         public DateTimeOffset? EstimationUsefulLifeYear { get; set; }

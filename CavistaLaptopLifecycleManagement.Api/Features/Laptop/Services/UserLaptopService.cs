@@ -1,8 +1,11 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Database.Entities;
+using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
+using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
+using static CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries.GetTickets;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
 {
@@ -16,21 +19,21 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<UserLaptop>> GetUserLaptopsAsync(Guid userId, CLMDbContext context)
+        public async Task<IEnumerable<Database.Entities.UserLaptop?>> GetUserLaptopsAsync(Guid userId, CLMDbContext context)
         {
             var userLaptops = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).ToListAsync();
 
             return userLaptops;
         }
 
-        public async Task<UserLaptop?> GetLaptopByUserIdAsync(Guid userId, CLMDbContext context)
+        public async Task<Database.Entities.UserLaptop?> GetLaptopByUserIdAsync(Guid userId, CLMDbContext context)
         {
             var userLaptop = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).FirstOrDefaultAsync();
 
             return userLaptop;
         }
 
-        public async Task<UserLaptop?> GetUserLaptopAsync(Guid laptopId, CLMDbContext context)
+        public async Task<Database.Entities.UserLaptop?> GetUserLaptopAsync(Guid laptopId, CLMDbContext context)
         {
             var userLaptops = await context.UserLaptops.Where(x => x.Id == laptopId && !x.IsDeprecated).FirstOrDefaultAsync();
 
@@ -44,7 +47,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             return user;
         }
 
-        public async Task<LaptopHistory?> GetLaptopLastStatusAsync(Guid laptopId, CLMDbContext context)
+        public async Task<Database.Entities.LaptopHistory?> GetLaptopLastStatusAsync(Guid laptopId, CLMDbContext context)
         {
             var userLastLaptopHistory = await context.LaptopHistories.Where(x => x.UserLaptopID == laptopId && !x.IsDeprecated).OrderByDescending(X => X.Created_At).FirstOrDefaultAsync();
 
@@ -53,24 +56,52 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
 
         public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
         {
-            var userLaptops = _context.UserLaptops                
-                .Where(x => !x.IsDeprecated)
-                .Select(x => new Models.UserLaptop
+            var userLaptops = from userLaptop in _context.UserLaptops                
+                where !userLaptop.IsDeprecated
+                join user in _context.Users on userLaptop.UserId equals user.Id into users
+                from curUser in users.DefaultIfEmpty()
+                select new Models.UserLaptop
                 {
-                    UserId = x.UserId,
-                    AssetName = x.AssetName,
-                    Model = x.Model,
-                    Comment = x.Comment,
-                    AssetLocation = x.AssetLocation,
-                    EmployeeDepartment = x.EmployeeDepartment,
-                    Price = x.Price,
-                    EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
-                    DepreciationEstimationDate = x.DepreciationEstimationDate,
-                    WarrantyExpirationDate = x.WarrantyExpirationDate,
-                    PurchaseYear = x.PurchaseYear                  
-                });
+                    Id = userLaptop.Id,
+                    UserId = userLaptop.UserId,
+                    AssetName = userLaptop.AssetName,
+                    Model = userLaptop.Model,
+                    Comment = userLaptop.Comment,
+                    AssetLocation = userLaptop.AssetLocation,
+                    EmployeeDepartment = userLaptop.EmployeeDepartment,
+                    Price = userLaptop.Price,
+                    EstimationUsefulLifeYear = userLaptop.EstimationUsefulLifeYear,
+                    DepreciationEstimationDate = userLaptop.DepreciationEstimationDate,
+                    WarrantyExpirationDate = userLaptop.WarrantyExpirationDate,
+                    PurchaseYear = userLaptop.PurchaseYear,
+                    status = userLaptop.UserLaptopStatus.GetDescription(),
+                    AssignedToEmail = curUser.EmailAddress,
+                    AssignedToName = curUser.FullName
+                };
 
-            return await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, pageNumber ?? 1, pageSize ?? 10);
+            var laptopHistoryList = await (from laptopHis in _context.LaptopHistories
+                                           where !laptopHis.IsDeprecated
+                                           join user in _context.Users on laptopHis.ActionBy equals user.Id
+                                           select new Models.LaptopHistory
+                                           {
+                                               Id = laptopHis.Id,
+                                               UserLaptopID = laptopHis.UserLaptopID,
+                                               ActionBy = user.FullName,
+                                               Comment = laptopHis.Comment,
+                                               UserLaptopHistoryStatus = laptopHis.UserLaptopHistoryStatus.GetDescription(),
+                                               CreatedAt = laptopHis.Created_At
+                                           }).ToListAsync();
+
+            var historyLookUp = laptopHistoryList.ToLookup(x => x.UserLaptopID);
+
+            var pagedResult = await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, pageNumber ?? 1, pageSize ?? 10);
+
+            foreach (var result in pagedResult.Item)
+            {
+                result.LaptopHistories = historyLookUp[result.Id].OrderBy(x => x.CreatedAt).ToList();
+            }
+
+            return pagedResult;
         }
     }
 }

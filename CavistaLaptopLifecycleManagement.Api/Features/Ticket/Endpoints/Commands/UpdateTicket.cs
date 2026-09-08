@@ -7,6 +7,7 @@ using CavistaLaptopLifecycleManagement.Api.Features.Ticket.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -26,7 +27,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             public string? Comment { get; init; }
         }
 
-        public sealed record Command
+        public sealed partial record Command 
         {
             [FromRoute]
             public required Guid TicketId { get; init; }
