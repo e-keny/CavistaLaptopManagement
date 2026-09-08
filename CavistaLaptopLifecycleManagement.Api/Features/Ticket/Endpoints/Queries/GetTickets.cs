@@ -23,6 +23,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
             public Guid Id { get; set; }
 
+            public Guid? OwnerId { get; set; }
+
             public string? Comment { get; set; }
 
             public string? AssignedTo { get; set; }
@@ -48,6 +50,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                          Id = ticket.Id,
                          Comment = ticket.Comment,
                          AssignedTo = user.FirstName,
+                         OwnerId = userLaptop.UserId,
                          TicketStatus = ticket.TicketStatus.GetDescription()
                      };
 
