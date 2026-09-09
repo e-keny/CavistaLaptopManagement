@@ -1,4 +1,6 @@
-﻿namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 {
     public class TicketComment : BaseEntity
     {

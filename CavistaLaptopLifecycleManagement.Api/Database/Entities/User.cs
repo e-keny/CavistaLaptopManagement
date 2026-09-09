@@ -1,5 +1,6 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
