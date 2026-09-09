@@ -8,6 +8,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public Guid Id { get; set; }
 
+        public string TicketNumber { get; set; }
+
         public Guid? OwnerId { get; set; }
 
         public string? OwnerName { get; set; }

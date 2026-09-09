@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 {
     public class Ticket : BaseEntity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int TicketNumber {  get; set; }
+
         public Guid UserId { get; set; }
 
         public Guid LaptopId { get; set; }
