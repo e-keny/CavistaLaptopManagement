@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
 using static CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands.AddComment;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Commands
@@ -55,7 +54,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 TicketId = id;
             }
         }
-
 
         private async static ValueTask<Results<Ok<CreateTicketResponse>, BadRequest<CreateTicketResponse>, NotFound<CreateTicketResponse>, UnauthorizedHttpResult>> HandleAsync(
             Command request,

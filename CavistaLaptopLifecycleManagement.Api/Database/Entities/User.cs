@@ -24,8 +24,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public bool IsActive { get; set; }
 
-        public DateTimeOffset? LastLogin { get; set; }
-
         public Role Role { get; set; }
 
         public ICollection<UserLaptop> UserLaptops { get; set; }
