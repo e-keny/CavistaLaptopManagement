@@ -25,8 +25,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
 
         public bool IsActive { get; set; }
 
-        public DateTimeOffset? LastLogin { get; set; }
-
         public Role Role { get; set; }
 
         public IReadOnlyList<UserLaptop> UserLaptops { get; set; }
@@ -46,7 +44,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 Auth0UserId = u.Auth0UserId,
                 EmailAddress = u.EmailAddress,
                 IsActive = u.IsActive,
-                LastLogin = u.LastLogin,
                 Role = u.Role,
                 UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
                 {
@@ -70,6 +67,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                         Id = x.Id,
                         UserLaptopID = x.UserLaptopID,
                         Comment = x.Comment,
+                        ActionBy = x.ActionBy,
                         UserLaptopHistoryStatus = x.UserLaptopHistoryStatus.GetDescription(),
                         CreatedAt = x.Created_At
                     }).ToList(),

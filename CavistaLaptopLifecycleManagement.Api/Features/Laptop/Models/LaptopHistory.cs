@@ -8,7 +8,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public Guid UserLaptopID { get; set; }
 
-        public string? ActionBy { get; set; }
+        public Guid? ActionBy { get; set; }
+
+        public string? ActionByName { get; set; }
 
         public string? Comment { get; set; }
 

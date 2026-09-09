@@ -33,6 +33,21 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Queries
            .Select(User.FromDatabaseEntity)
            .ToListAsync(token);
 
+            var actionByIds = result.SelectMany(x => x.UserLaptops, (user, userLaptop) => new { user, userLaptop })
+                            .SelectMany(userAndLaptop => userAndLaptop.userLaptop.LaptopHistories, (userAndLap, laptopHis) => laptopHis)
+                            .Select(x => x.ActionBy).ToList();
+
+            var actionIdBySet = result.SelectMany(x => x.UserLaptops, (user, userLaptop) => new { user, userLaptop })
+                            .SelectMany(userAndLaptop => userAndLaptop.userLaptop.LaptopHistories, (userAndLap, laptopHis) => laptopHis)
+                            .Select(x => x).ToList();
+
+            var actionByLookup = context.Users.Where(x => actionByIds.Contains(x.Id)).ToLookup(x => x.Id);
+
+            foreach (var res in actionIdBySet)
+            {
+                res.ActionByName = res.ActionBy.HasValue ? actionByLookup[res.ActionBy.Value].Select(x => x.FullName).FirstOrDefault() : default;
+            }
+
             return TypedResults.Ok(result);
         }
     }

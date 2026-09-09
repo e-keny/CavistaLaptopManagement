@@ -86,7 +86,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                                            {
                                                Id = laptopHis.Id,
                                                UserLaptopID = laptopHis.UserLaptopID,
-                                               ActionBy = user.FullName,
+                                               ActionBy = laptopHis.ActionBy,
+                                               ActionByName = user.FullName,
                                                Comment = laptopHis.Comment,
                                                UserLaptopHistoryStatus = laptopHis.UserLaptopHistoryStatus.GetDescription(),
                                                CreatedAt = laptopHis.Created_At
