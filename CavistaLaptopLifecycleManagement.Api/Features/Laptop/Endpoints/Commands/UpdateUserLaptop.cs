@@ -119,6 +119,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                     existingLaptop.UserId = null;
                     existingLaptop.UserLaptopStatus = UserLaptopHistoryStatus.UnAssigned;
                 }
+                else
+                {
+                    existingLaptop.UserId = null;
+                    existingLaptop.UserLaptopStatus = requestBody.Status;
+                }
             }
             else
             {
