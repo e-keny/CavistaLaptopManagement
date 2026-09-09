@@ -30,6 +30,27 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             modelBuilder.Entity<LaptopHistory>().ToTable("LaptopHistories");
             modelBuilder.Entity<Ticket>().ToTable("Tickets");
             modelBuilder.Entity<AuditTrail>().ToTable("AuditTrails");
+
+            modelBuilder.Entity<LaptopHistory>().
+                    HasIndex(laptopHis => laptopHis.UserLaptopID, "Idx_LaptopHistory_LaptopId");
+
+            modelBuilder.Entity<Notification>().
+                    HasIndex(notification => notification.UserId, "Idx_Notification_UserId");
+
+            modelBuilder.Entity<Ticket>().
+                    HasIndex(ticket => ticket.UserId, "Idx_Ticket_UserId");
+
+            modelBuilder.Entity<TicketComment>().
+                  HasIndex(ticketComment => ticketComment.TicketId, "Idx_TicketComment_TicketId");
+
+            modelBuilder.Entity<TicketHistory>().
+                    HasIndex(tickethistory => tickethistory.TicketID, "Idx_TicketHistory_TicketID");
+
+            modelBuilder.Entity<User>().
+                    HasIndex(user => user.Auth0UserId, "Idx_User_Auth0UserId");
+
+            modelBuilder.Entity<UserLaptop>().
+                    HasIndex(userLaptop => userLaptop.UserId, "Idx_UserLaptop_UserId");
         }
     }
 }

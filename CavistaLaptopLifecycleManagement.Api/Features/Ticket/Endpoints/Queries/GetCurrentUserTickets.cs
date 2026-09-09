@@ -40,13 +40,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                  where !user.IsDeprecated
                                  join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
+                                 join LaptopOwner in context.Users on ticket.UserId equals LaptopOwner.Id into laptopOwnerList
+                                 from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                                  select new TicketCommentDetail
                                  {
                                      UserLaptopID = laptop.Id,
                                      Id = ticket.Id,
                                      Comment = ticket.Comment,
                                      AssignedTo = user.FirstName,
-                                     OwnerId = laptop.UserId,
+                                     OwnerId = LaptopOwner.Id,
+                                     OwnerName = $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}",
                                      TicketStatus = ticket.TicketStatus.GetDescription()
                                  };
 

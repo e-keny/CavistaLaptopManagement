@@ -5,7 +5,6 @@ using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
-using static CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries.GetTickets;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
 {
@@ -74,7 +73,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                     DepreciationEstimationDate = userLaptop.DepreciationEstimationDate,
                     WarrantyExpirationDate = userLaptop.WarrantyExpirationDate,
                     PurchaseYear = userLaptop.PurchaseYear,
-                    status = userLaptop.UserLaptopStatus.GetDescription(),
+                    status = userLaptop.UserLaptopStatus,
                     AssignedToEmail = curUser.EmailAddress,
                     AssignedToName = curUser.FullName
                 };
@@ -94,7 +93,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                                                ActionBy = laptopHis.ActionBy,
                                                ActionByName = user.FullName,
                                                Comment = laptopHis.Comment,
-                                               UserLaptopHistoryStatus = laptopHis.UserLaptopHistoryStatus.GetDescription(),
+                                               UserLaptopHistoryStatus = laptopHis.UserLaptopHistoryStatus,
                                                CreatedAt = laptopHis.Created_At
                                            }).ToListAsync();
 

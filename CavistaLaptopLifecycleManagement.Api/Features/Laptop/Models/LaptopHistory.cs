@@ -14,7 +14,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public string? Comment { get; set; }
 
-        public string? UserLaptopHistoryStatus { get; set; }
+        public UserLaptopHistoryStatus UserLaptopHistoryStatus { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
     }

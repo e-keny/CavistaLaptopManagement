@@ -1,4 +1,5 @@
-﻿using Immediate.Apis.Shared;
+﻿using CavistaLaptopLifecycleManagement.Api.Database.Entities;
+using Immediate.Apis.Shared;
 using System.Linq.Expressions;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
@@ -22,7 +23,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public string AssignedToEmail { get; set; }
 
-        public string? status { get; set; }
+        public UserLaptopHistoryStatus status { get; set; }
 
         public Decimal Price { get; set; }
 

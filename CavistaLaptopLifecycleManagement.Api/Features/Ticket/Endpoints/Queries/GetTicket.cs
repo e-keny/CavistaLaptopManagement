@@ -1,5 +1,4 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models;
 using Immediate.Apis.Shared;
@@ -7,7 +6,6 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries.GetTickets;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 {
@@ -30,6 +28,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                  where !user.IsDeprecated
                                  join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
+                                 join LaptopOwner in context.Users on ticket.UserId equals LaptopOwner.Id into laptopOwnerList
+                                 from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                                  select new TicketCommentDetail
                                  {
                                      UserLaptopID = laptop.Id,
@@ -37,6 +37,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                      Comment = ticket.Comment,
                                      AssignedTo = user.FirstName,
                                      OwnerId = laptop.UserId,
+                                     OwnerName = $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}",
                                      TicketStatus = ticket.TicketStatus.GetDescription()
                                  }).FirstOrDefaultAsync(token);
 

@@ -58,7 +58,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
                     DepreciationEstimationDate = x.DepreciationEstimationDate,
                     WarrantyExpirationDate = x.WarrantyExpirationDate,
-                    status = x.UserLaptopStatus.GetDescription(),
+                    status = x.UserLaptopStatus,
                     AssignedToEmail = u.EmailAddress,
                     AssignedToName = u.FullName,
                     PurchaseYear = x.PurchaseYear,
@@ -68,7 +68,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                         UserLaptopID = x.UserLaptopID,
                         Comment = x.Comment,
                         ActionBy = x.ActionBy,
-                        UserLaptopHistoryStatus = x.UserLaptopHistoryStatus.GetDescription(),
+                        UserLaptopHistoryStatus = x.UserLaptopHistoryStatus,
                         CreatedAt = x.Created_At
                     }).ToList(),
                 }).ToList()
