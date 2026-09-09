@@ -43,12 +43,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                  from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                                  select new TicketCommentDetail
                                  {
-                                     UserLaptopID = laptop.Id,
+                                     UserLaptopID = laptop != null ? laptop.Id : null,
                                      Id = ticket.Id,
                                      Comment = ticket.Comment,
                                      AssignedTo = user.FirstName,
-                                     OwnerId = LaptopOwner.Id,
-                                     OwnerName = $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}",
+                                     OwnerId = LaptopOwner != null ? LaptopOwner.Id : null,
+                                     OwnerName = LaptopOwner != null ? $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}" : string.Empty,
                                      TicketStatus = ticket.TicketStatus
                                  };
 
