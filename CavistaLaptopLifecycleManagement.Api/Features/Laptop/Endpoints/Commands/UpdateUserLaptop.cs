@@ -54,7 +54,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             }
         }
 
-        private async static ValueTask<Results<Ok<UpdateUserResponse>, BadRequest<UpdateUserResponse>, UnauthorizedHttpResult, NoContent>> HandleAsync(
+        private async static ValueTask<Results<Ok<UpdateUserResponse>, BadRequest<UpdateUserResponse>, UnauthorizedHttpResult, StatusCodeHttpResult>> HandleAsync(
             Command command,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
@@ -127,7 +127,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             }
             else
             {
-                return TypedResults.NoContent();
+                return TypedResults.StatusCode(304);
             }
 
             var lapTopHistoryToAdd = new Database.Entities.LaptopHistory
