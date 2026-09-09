@@ -148,7 +148,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             {
                 var notificationMessage = $"{existingLaptop.AssetName} has been assigned to you";
 
-                await notificationService.NotifyUser(context, requestBody.UserID.Value, notificationMessage);
+                _ = Task.Run(() => notificationService.NotifyUser(context, requestBody.UserID.Value, notificationMessage));
             }
 
             try
