@@ -2,17 +2,13 @@
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 {
-    public class UserTicketDetail
+    public class TicketCommentDetail
     {
         public Guid UserLaptopID { get; set; }
 
         public Guid Id { get; set; }
 
-        public Guid? LastModifiedBy { get; set; }
-
-        public DateTimeOffset ClosedAt { get; set; }
-
-        public Guid? ActionBy { get; set; }
+        public Guid? OwnerId { get; set; }
 
         public string? Comment { get; set; }
 

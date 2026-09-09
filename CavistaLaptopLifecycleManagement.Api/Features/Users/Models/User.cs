@@ -1,4 +1,5 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using System.Linq.Expressions;
@@ -60,7 +61,18 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
                     DepreciationEstimationDate = x.DepreciationEstimationDate,
                     WarrantyExpirationDate = x.WarrantyExpirationDate,
-                    PurchaseYear = x.PurchaseYear
+                    status = x.UserLaptopStatus.GetDescription(),
+                    AssignedToEmail = u.EmailAddress,
+                    AssignedToName = u.FullName,
+                    PurchaseYear = x.PurchaseYear,
+                    LaptopHistories = x.LaptopHistories.Select(x => new LaptopHistory
+                    {
+                        Id = x.Id,
+                        UserLaptopID = x.UserLaptopID,
+                        Comment = x.Comment,
+                        UserLaptopHistoryStatus = x.UserLaptopHistoryStatus.GetDescription(),
+                        CreatedAt = x.Created_At
+                    }).ToList(),
                 }).ToList()
             };
 

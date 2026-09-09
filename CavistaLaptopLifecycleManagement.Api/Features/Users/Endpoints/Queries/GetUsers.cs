@@ -22,6 +22,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints
             CancellationToken token)
         {
              var result = await context.Users
+                .Where(x => !x.IsDeprecated)
                 .Include(x => x.UserLaptops)
             .Select(User.FromDatabaseEntity)
             .ToListAsync(token);

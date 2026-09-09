@@ -17,23 +17,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
-        public class TicketCommentDetail
-        {
-            public Guid UserLaptopID { get; set; }
-
-            public Guid Id { get; set; }
-
-            public Guid? OwnerId { get; set; }
-
-            public string? Comment { get; set; }
-
-            public string? AssignedTo { get; set; }
-
-            public string? TicketStatus { get; set; }
-
-            public List<TicketComment> Comments { get; set; }
-        }
-
         private async static ValueTask<Results<Ok<PaginatedList<TicketCommentDetail>>, BadRequest>> HandleAsync(
             Query request,
             CLMDbContext context,
@@ -43,14 +26,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                      where !ticket.IsDeprecated
                      join user in context.Users on ticket.UserId equals user.Id
                      where !user.IsDeprecated
-                     join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId
+                     join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId into laptopList
+                     from laptop in laptopList.DefaultIfEmpty()
                      select new TicketCommentDetail
                      {
-                         UserLaptopID = userLaptop.Id,
+                         UserLaptopID = laptop.Id,
                          Id = ticket.Id,
                          Comment = ticket.Comment,
                          AssignedTo = user.FirstName,
-                         OwnerId = userLaptop.UserId,
+                         OwnerId = laptop.UserId,
                          TicketStatus = ticket.TicketStatus.GetDescription()
                      };
 
