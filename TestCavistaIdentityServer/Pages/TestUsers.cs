@@ -69,22 +69,6 @@ namespace TestCavistaIdentityServer.Pages
                             new Claim(JwtClaimTypes.WebSite, "http://ekene.example.com"),
                             new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
                         }
-                    },
-                     new TestUser
-                    {
-                        SubjectId = "4",
-                        Username = "yusuff",
-                        Password = "yusuff",
-                        Claims =
-                        {
-                            new Claim(JwtClaimTypes.Name, "Yusuff Bello"),
-                            new Claim(JwtClaimTypes.GivenName, "Yusuff"),
-                            new Claim(JwtClaimTypes.FamilyName, "Bello"),
-                            new Claim(JwtClaimTypes.Email, "ybello@axxess.com"),
-                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.WebSite, "http://bello.example.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
-                        }
                     }
                 };
             }
