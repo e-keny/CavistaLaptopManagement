@@ -4,20 +4,23 @@ using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using CavistaLaptopLifecycleManagement.Api.Infrastructure.Emails;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 {
     [RegisterScoped]
     public class NotificationService
     {
+        private readonly CLMDbContext _context;
         private readonly MailService _mailService;
 
         public NotificationService(CLMDbContext context, MailService mailService)
         {
+            _context = context;
             _mailService = mailService;
         }
 
-        public async ValueTask NotifyUser(CLMDbContext context, Guid userId, string message)
+        public async ValueTask NotifyUser(Guid userId, string message)
         {         
             var notificationToAdd = new Notification
             {
@@ -28,19 +31,30 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(notificationToAdd);
+            await _context.Notifications.AddAsync(notificationToAdd);
 
-            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+
             if (user != null)
             {
                 var to = new List<string>() { user.EmailAddress };
                 var emailMessage = new Message(to, $"Activity Notification", $"{message}");
-                await _mailService.SendEmailAsync(emailMessage);
+
+                try
+                {
+                    await _mailService.SendEmailAsync(emailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }
+                
             }
 
+            _context.SaveChanges();
         }
 
-        public async ValueTask NotifyAttendant(CLMDbContext context, Guid attendantId, string message)
+        public async ValueTask NotifyAttendant(Guid attendantId, string message)
         {
             var notificationToAdd = new Notification
             {
@@ -51,19 +65,29 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(notificationToAdd);
+            await _context.Notifications.AddAsync(notificationToAdd);
 
-            var user = await context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
                 var to = new List<string>() { user.EmailAddress };
                 var emailMessage = new Message(to, $"Activity Notification", $"{message}");
-                await _mailService.SendEmailAsync(emailMessage);
+
+                try
+                {
+                    await _mailService.SendEmailAsync(emailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }                
             }
+
+            _context.SaveChanges();
         }
 
-        public async ValueTask NotifyUserAndAttendant(CLMDbContext context, Guid userId, string userMessage, Guid attendantId, string attendantMessage)
+        public async ValueTask NotifyUserAndAttendant(Guid userId, string userMessage, Guid attendantId, string attendantMessage)
         {
             var userNotificationToAdd = new Notification
             {
@@ -74,15 +98,23 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(userNotificationToAdd);
+            await _context.Notifications.AddAsync(userNotificationToAdd);
 
-            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
                 var to = new List<string>() { user.EmailAddress };
                 var emailMessage = new Message(to, $"Activity Notification", $"{userMessage}");
-                await _mailService.SendEmailAsync(emailMessage);
+
+                try
+                {
+                    await _mailService.SendEmailAsync(emailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }
             }
 
             var attendantNotificationToAdd = new Notification
@@ -94,21 +126,32 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(attendantNotificationToAdd);
+            await _context.Notifications.AddAsync(attendantNotificationToAdd);
 
-            var attendUser = await context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var attendUser = await _context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (attendUser != null)
             {
                 var attendanTo = new List<string>() { attendUser.EmailAddress };
                 var attendantEmailMessage = new Message(attendanTo, $"Activity Notification", $"{attendantMessage}");
-                await _mailService.SendEmailAsync(attendantEmailMessage);
+               
+
+                try
+                {
+                    await _mailService.SendEmailAsync(attendantEmailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }
             }
+
+            _context.SaveChanges();
         }
 
-        public async ValueTask NotifyUserAndIT(CLMDbContext context, Guid userId, string userMessage, string adminMessage)
+        public async ValueTask NotifyUserAndIT(Guid userId, string userMessage, string adminMessage)
         {
-            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             var userNotificationToAdd = new Notification
             {
@@ -119,7 +162,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(userNotificationToAdd);
+            await _context.Notifications.AddAsync(userNotificationToAdd);
 
             if (user != null)
             {
@@ -128,7 +171,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 await _mailService.SendEmailAsync(emailMessage);
             }
 
-            var adminList = await context.Users.Where(x => x.Role == Role.Admin && !x.IsDeprecated).ToListAsync();
+            var adminList = await _context.Users.Where(x => x.Role == Role.Admin && !x.IsDeprecated).ToListAsync();
 
             foreach (var adminUser in adminList)
             {
@@ -141,7 +184,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await context.Notifications.AddAsync(attendantNotificationToAdd);
+                await _context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -149,13 +192,23 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             if (adminEmailAddresses.Any())
             {
                 var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
-                await _mailService.SendEmailAsync(attendantEmailMessage);
+               
+                try
+                {
+                    await _mailService.SendEmailAsync(attendantEmailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }
             }
+
+            _context.SaveChanges();
         }
 
-        public async ValueTask NotifyIT(CLMDbContext context, string adminMessage)
+        public async ValueTask NotifyIT(string adminMessage)
         {
-            var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
+            var adminList = await _context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
 
             foreach (var user in adminList)
             {
@@ -168,7 +221,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await context.Notifications.AddAsync(attendantNotificationToAdd);
+                await _context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -176,8 +229,18 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             if (adminEmailAddresses.Any())
             {
                 var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
-                await _mailService.SendEmailAsync(attendantEmailMessage);
+               
+                try
+                {
+                    await _mailService.SendEmailAsync(attendantEmailMessage);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred => {ex.Message}");
+                }
             }
+
+            _context.SaveChanges();
         }
     }
 }
