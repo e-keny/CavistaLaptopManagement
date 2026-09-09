@@ -1,7 +1,6 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
-using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;

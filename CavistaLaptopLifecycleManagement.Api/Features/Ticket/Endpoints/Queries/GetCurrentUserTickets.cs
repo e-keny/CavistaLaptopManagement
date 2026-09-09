@@ -8,7 +8,6 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries.GetTickets;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 {
@@ -50,7 +49,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                      AssignedTo = user.FirstName,
                                      OwnerId = LaptopOwner.Id,
                                      OwnerName = $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}",
-                                     TicketStatus = ticket.TicketStatus.GetDescription()
+                                     TicketStatus = ticket.TicketStatus
                                  };
 
             var ticketCommentList = await (from ticketComment in context.TicketComments

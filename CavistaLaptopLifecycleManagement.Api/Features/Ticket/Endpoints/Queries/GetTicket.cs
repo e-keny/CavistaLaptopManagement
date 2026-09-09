@@ -38,7 +38,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                      AssignedTo = user.FirstName,
                                      OwnerId = laptop.UserId,
                                      OwnerName = $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}",
-                                     TicketStatus = ticket.TicketStatus.GetDescription()
+                                     TicketStatus = ticket.TicketStatus
                                  }).FirstOrDefaultAsync(token);
 
             if (userTicket != null)
