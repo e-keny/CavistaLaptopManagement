@@ -39,9 +39,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
             modelBuilder.Entity<Ticket>().
                     HasIndex(ticket => ticket.UserId, "Idx_Ticket_UserId");
-
             modelBuilder.Entity<Ticket>().
-             HasIndex(ticket => ticket.LaptopId, "Idx_LaptopId_UserId");
+                    HasIndex(ticket => ticket.LaptopId, "Idx_LaptopId_UserId");
+            modelBuilder.Entity<Ticket>().
+                    HasIndex(ticket => ticket.TicketNumber, "Idx_TicketNumber_UserId");
 
             modelBuilder.Entity<TicketComment>().
                   HasIndex(ticketComment => ticketComment.TicketId, "Idx_TicketComment_TicketId");
