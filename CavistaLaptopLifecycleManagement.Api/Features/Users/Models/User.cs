@@ -45,7 +45,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 EmailAddress = u.EmailAddress,
                 IsActive = u.IsActive,
                 Role = u.Role,
-                UserLaptops = u.UserLaptops.Select(x => new UserLaptop 
+                UserLaptops = u.UserLaptops.Where(x => !x.IsDeprecated).Select(x => new UserLaptop 
                 {
                     Id = x.Id,
                     UserId = x.UserId,
@@ -62,7 +62,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     AssignedToEmail = u.EmailAddress,
                     AssignedToName = u.FullName,
                     PurchaseYear = x.PurchaseYear,
-                    LaptopHistories = x.LaptopHistories.Select(x => new LaptopHistory
+                    LaptopHistories = x.LaptopHistories.Where(x => !x.IsDeprecated).Select(x => new LaptopHistory
                     {
                         Id = x.Id,
                         UserLaptopID = x.UserLaptopID,

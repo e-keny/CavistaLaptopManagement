@@ -79,8 +79,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                     AssignedToName = curUser.FullName
                 };
 
+            var pagedResult = await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, pageNumber ?? 1, pageSize ?? 10);
+
+            var listOfLaptopIds = pagedResult.Item.Select(x => x.Id).ToList();
+
             var laptopHistoryList = await (from laptopHis in _context.LaptopHistories
                                            where !laptopHis.IsDeprecated
+                                           && listOfLaptopIds.Contains(laptopHis.UserLaptopID)
                                            join user in _context.Users on laptopHis.ActionBy equals user.Id
                                            select new Models.LaptopHistory
                                            {
@@ -94,8 +99,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                                            }).ToListAsync();
 
             var historyLookUp = laptopHistoryList.ToLookup(x => x.UserLaptopID);
-
-            var pagedResult = await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, pageNumber ?? 1, pageSize ?? 10);
 
             foreach (var result in pagedResult.Item)
             {

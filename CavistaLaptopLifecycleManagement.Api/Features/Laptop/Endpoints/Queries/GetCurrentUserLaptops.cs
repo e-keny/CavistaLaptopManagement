@@ -1,11 +1,13 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
+using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
 {
@@ -29,9 +31,57 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                 return TypedResults.Unauthorized();
             }
 
-            var ticket = context.UserLaptops.Where(t => t.UserId == currentUser.Id).Select(UserLaptop.FromDatabaseEntity);
+            var userLaptops = from userLaptop in context.UserLaptops
+                              where !userLaptop.IsDeprecated
+                              && userLaptop.UserId == currentUser.Id
+                              join user in context.Users on userLaptop.UserId equals user.Id into users
+                              from curUser in users.DefaultIfEmpty()
+                              select new Models.UserLaptop
+                              {
+                                  Id = userLaptop.Id,
+                                  UserId = userLaptop.UserId,
+                                  AssetName = userLaptop.AssetName,
+                                  Model = userLaptop.Model,
+                                  Comment = userLaptop.Comment,
+                                  AssetLocation = userLaptop.AssetLocation,
+                                  EmployeeDepartment = userLaptop.EmployeeDepartment,
+                                  Price = userLaptop.Price,
+                                  EstimationUsefulLifeYear = userLaptop.EstimationUsefulLifeYear,
+                                  DepreciationEstimationDate = userLaptop.DepreciationEstimationDate,
+                                  WarrantyExpirationDate = userLaptop.WarrantyExpirationDate,
+                                  PurchaseYear = userLaptop.PurchaseYear,
+                                  status = userLaptop.UserLaptopStatus.GetDescription(),
+                                  AssignedToEmail = curUser.EmailAddress,
+                                  AssignedToName = curUser.FullName
+                              };
 
-            return TypedResults.Ok(await PaginatedList<UserLaptop>.CreateAsync(ticket, request.pageNumber ?? 1, request.pageSize ?? 10));
+            var pagedResult = await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, request.pageNumber ?? 1, request.pageSize ?? 10);
+
+            var listOfLaptopIds = pagedResult.Item.Select(x => x.Id).ToList();
+
+            var laptopHistoryList = await (from laptopHis in context.LaptopHistories
+                                           where !laptopHis.IsDeprecated
+                                           && listOfLaptopIds.Contains(laptopHis.UserLaptopID)
+                                           join user in context.Users on laptopHis.ActionBy equals user.Id
+                                           select new Models.LaptopHistory
+                                           {
+                                               Id = laptopHis.Id,
+                                               UserLaptopID = laptopHis.UserLaptopID,
+                                               ActionBy = laptopHis.ActionBy,
+                                               ActionByName = user.FullName,
+                                               Comment = laptopHis.Comment,
+                                               UserLaptopHistoryStatus = laptopHis.UserLaptopHistoryStatus.GetDescription(),
+                                               CreatedAt = laptopHis.Created_At
+                                           }).ToListAsync();
+
+            var historyLookUp = laptopHistoryList.ToLookup(x => x.UserLaptopID);
+
+            foreach (var result in pagedResult.Item)
+            {
+                result.LaptopHistories = historyLookUp[result.Id].OrderBy(x => x.CreatedAt).ToList();
+            }
+
+            return TypedResults.Ok(pagedResult);
         }
     }
 }

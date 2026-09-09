@@ -24,7 +24,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints
         {
              var result = await context.Users
                 .Where(x => !x.IsDeprecated)
-                .Include(x => x.UserLaptops)
+                .Include(x => x.UserLaptops.Where(x => !x.IsDeprecated))
             .Select(User.FromDatabaseEntity)
             .ToListAsync(token);
 
