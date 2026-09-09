@@ -70,16 +70,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 return TypedResults.Unauthorized();
             }
 
-            var ticketToAdd = new Database.Entities.Ticket
-            {
-                Description = request.Body.Description,
-                Comment = request.Body.Comment,
-                UserId = currentUser.Id, 
-                Created_At = DateTime.UtcNow,
-                Modified = DateTime.UtcNow,
-            };
-
-            context.Tickets.Add(ticketToAdd);
 
             var userLaptop = await context.UserLaptops
                 .Where(x => x.UserId == currentUser.Id && !x.IsDeprecated)
@@ -89,6 +79,18 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             {
                 return TypedResults.NotFound(new CreateTicketResponse("Laptop not found for this user"));
             }
+
+            var ticketToAdd = new Database.Entities.Ticket
+            {
+                Description = request.Body.Description,
+                Comment = request.Body.Comment,
+                UserId = currentUser.Id, 
+                LaptopId = userLaptop.Id,
+                Created_At = DateTime.UtcNow,
+                Modified = DateTime.UtcNow,
+            };
+
+            context.Tickets.Add(ticketToAdd);
 
             var historyToAdd = new Database.Entities.TicketHistory
             {

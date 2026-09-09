@@ -23,10 +23,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
         {
             var userTicketList = from ticket in context.Tickets
                      where !ticket.IsDeprecated
-                     join user in context.Users on ticket.UserId equals user.Id
-                     where !user.IsDeprecated
-                     join userLaptop in context.UserLaptops on user.Id equals userLaptop.UserId into laptopList
+                     join userLaptop in context.UserLaptops on ticket.LaptopId equals userLaptop.Id into laptopList
                      from laptop in laptopList.DefaultIfEmpty()
+                     join user in context.Users on ticket.UserId equals user.Id
+                     where !user.IsDeprecated                     
                      join LaptopOwner in context.Users on ticket.UserId equals LaptopOwner.Id into laptopOwnerList
                      from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                      select new TicketCommentDetail

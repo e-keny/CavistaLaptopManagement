@@ -7,6 +7,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
     {
         public Guid UserId { get; set; }
 
+        public Guid LaptopId { get; set; }
+
         [MaxLength(500)]
         public string? Description { get; set; }
 
