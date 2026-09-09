@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Queries
 {
     [Handler]
-    [MapGet("notification/{notificationId}")]
+    [MapGet("mark-as-read/{notificationId}")]
     [MapGroup<UserMapGroup>]
     public static partial class MarkNotificationAsRead
     {
