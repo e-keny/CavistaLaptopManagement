@@ -51,14 +51,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
             EstimationUsefulLifeYear = u.EstimationUsefulLifeYear,
             DepreciationEstimationDate = u.DepreciationEstimationDate,
             WarrantyExpirationDate = u.WarrantyExpirationDate,
-            PurchaseYear = u.PurchaseYear
-            //LaptopHistories = u.LaptopHistories != null ? u.LaptopHistories.Select(x => new LaptopHistory
-            //{
-            //    UserLaptopID = x.UserLaptopID,
-            //    Comment = x.Comment,
-            //    ActionBy = x.ActionBy
+            PurchaseYear = u.PurchaseYear,
+            LaptopHistories = u.LaptopHistories != null ? u.LaptopHistories.Select(x => new LaptopHistory
+            {
+                UserLaptopID = x.UserLaptopID,
+                Comment = x.Comment,
+                ActionBy = x.ActionBy
 
-            //}).ToList() : new List<TicketHistory>()
+            }).ToList() : new List<LaptopHistory>()
         };
         }
 
@@ -68,7 +68,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
     {
         private static void CustomizeGroup(RouteGroupBuilder group)
             => group
-                //.RequireAuthorization()
+                .RequireAuthorization()
                 .WithTags("Laptops");
     }
 }

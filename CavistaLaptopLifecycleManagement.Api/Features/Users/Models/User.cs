@@ -87,7 +87,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
     {
         private static void CustomizeGroup(RouteGroupBuilder group)
             => group
-                //.RequireAuthorization(Policies.ITRolePolicy)
                 .RequireAuthorization()
                 .WithTags("Users");
     }

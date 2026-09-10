@@ -8,6 +8,7 @@ using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -17,6 +18,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
     [Handler]
     [MapPut("{ticketId}/claim-resolve")]
     [MapGroup<TicketMapGroup>]
+    [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class UpdateTicket
     {
 

@@ -16,7 +16,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     [MapGroup<TicketMapGroup>]
     public static partial class GetCurrentUserTickets
     {
-        public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
+        public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize, [FromQuery]string? searchString);
 
         private async static ValueTask<Results<Ok<PaginatedList<TicketCommentDetail>>, UnauthorizedHttpResult>> HandleAsync(
             Query request,
@@ -31,10 +31,19 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                 return TypedResults.Unauthorized();
             }
 
+            bool searchStringIsNullOrEmpty = string.IsNullOrWhiteSpace(request.searchString) ? true : false;
+            int ticketNumber = 0;
+
+            if (!searchStringIsNullOrEmpty)
+            {
+                string? numericPart = request?.searchString != null ? new string(request.searchString.Where(char.IsDigit).ToArray()) : default;
+
+                ticketNumber = !int.TryParse(numericPart, out int rawNumber) ? rawNumber : rawNumber;
+            }
 
             var userTicketList = from ticket in context.Tickets
                                  where ticket.UserId == currentUser.Id
-                                 && !ticket.IsDeprecated
+                                 && !ticket.IsDeprecated && (searchStringIsNullOrEmpty || ticket.TicketNumber == ticketNumber)
                                  join userLaptop in context.UserLaptops on ticket.LaptopId equals userLaptop.Id into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
                                  join user in context.Users on ticket.UserId equals user.Id

@@ -1,8 +1,10 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     [Handler]
     [MapGet("")]
     [MapGroup<TicketMapGroup>]
+    [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class GetTickets
     {        
         public sealed class FetAllTickets
@@ -78,7 +81,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
             var commentLookUp = ticketCommentList.ToLookup(x => x.TicketId);
 
-            var pagedResult = await PaginatedList<TicketCommentDetail>.CreateAsync(userTicketList, request.pageNumber ?? 1, request.pageSize ?? 10);
+            var pagedResult = await PaginatedList<TicketCommentDetail>.CreateAsync(userTicketList, request?.pageNumber ?? 1, request?.pageSize ?? 10);
 
             foreach (var result in pagedResult.Item)
             {                         

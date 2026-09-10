@@ -6,6 +6,7 @@ using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -15,6 +16,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
     [Handler]
     [MapPut("update/{laptopId}")]
     [MapGroup<LaptopMapGroup>]
+    [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class UpdateUserLaptop
     {
         public sealed record UpdateLaptopBody
