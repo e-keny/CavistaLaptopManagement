@@ -30,7 +30,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                 return TypedResults.Unauthorized();
             }
 
-            var userLaptops = from userLaptop in context.UserLaptops
+            var userLaptops = from userLaptop in context.Laptops
                               where !userLaptop.IsDeprecated
                               && userLaptop.UserId == currentUser.Id
                               join user in context.Users on userLaptop.UserId equals user.Id into users

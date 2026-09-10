@@ -44,7 +44,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
             var userTicketList = from ticket in context.Tickets
                                  where ticket.UserId == currentUser.Id
                                  && !ticket.IsDeprecated && (searchStringIsNullOrEmpty || ticket.TicketNumber == ticketNumber)
-                                 join userLaptop in context.UserLaptops on ticket.LaptopId equals userLaptop.Id into laptopList
+                                 join userLaptop in context.Laptops on ticket.LaptopId equals userLaptop.Id into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
                                  join user in context.Users on ticket.UserId equals user.Id
                                  where !user.IsDeprecated                                

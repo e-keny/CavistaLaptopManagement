@@ -37,7 +37,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public List<LaptopHistory> LaptopHistories { get; set; }
 
-        public static readonly Expression<Func<Database.Entities.UserLaptop, UserLaptop>> FromDatabaseEntity =
+        public static readonly Expression<Func<Database.Entities.Laptop, UserLaptop>> FromDatabaseEntity =
         u => new()
         {
             Id = u.Id,

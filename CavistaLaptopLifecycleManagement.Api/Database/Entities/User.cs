@@ -27,7 +27,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public Role Role { get; set; }
 
-        public ICollection<UserLaptop> UserLaptops { get; set; }
+        public ICollection<Laptop> Laptops { get; set; }
 
         public string FullName
         {

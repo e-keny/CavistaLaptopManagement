@@ -20,7 +20,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public TicketHistoryStatus? TicketHistoryStatus { get; set; }
 
-        public UserLaptop UserLaptop { get; set; }
+        public Laptop UserLaptop { get; set; }
 
         public Ticket? Ticket { get; set; }
     }

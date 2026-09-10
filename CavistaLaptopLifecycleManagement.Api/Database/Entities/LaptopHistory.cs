@@ -14,7 +14,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public UserLaptopHistoryStatus UserLaptopHistoryStatus { get; set; }
 
-        public UserLaptop UserLaptop { get; set; }
+        public Laptop UserLaptop { get; set; }
     }
 
     public enum UserLaptopHistoryStatus

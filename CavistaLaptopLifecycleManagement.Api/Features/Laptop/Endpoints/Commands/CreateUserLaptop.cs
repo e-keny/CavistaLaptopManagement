@@ -79,7 +79,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             var requestBody = command.Body;
 
-            var laptopToAdd = new Database.Entities.UserLaptop
+            var laptopToAdd = new Database.Entities.Laptop
             {
                 AssetName = requestBody.AssetName,
                 Model = requestBody.Model,
@@ -95,7 +95,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 Modified = DateTime.UtcNow.ToUniversalTime()
             };
 
-            context.UserLaptops.Add(laptopToAdd);
+            context.Laptops.Add(laptopToAdd);
 
             await auditTrailService.AddAuditTrailAsync(context, user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
 

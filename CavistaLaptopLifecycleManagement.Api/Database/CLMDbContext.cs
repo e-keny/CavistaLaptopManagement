@@ -9,7 +9,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
     {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<UserLaptop> UserLaptops { get; set; }
+        public DbSet<Laptop> Laptops { get; set; }
 
         public DbSet<LaptopHistory> LaptopHistories { get; set; }
 
@@ -26,7 +26,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<UserLaptop>().ToTable("UserLaptops");
+            modelBuilder.Entity<Laptop>().ToTable("UserLaptops");
             modelBuilder.Entity<LaptopHistory>().ToTable("LaptopHistories");
             modelBuilder.Entity<Ticket>().ToTable("Tickets");
             modelBuilder.Entity<AuditTrail>().ToTable("AuditTrails");
@@ -53,7 +53,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             modelBuilder.Entity<User>().
                     HasIndex(user => user.Auth0UserId, "Idx_User_Auth0UserId");
 
-            modelBuilder.Entity<UserLaptop>().
+            modelBuilder.Entity<Laptop>().
                     HasIndex(userLaptop => userLaptop.UserId, "Idx_UserLaptop_UserId");
         }
     }

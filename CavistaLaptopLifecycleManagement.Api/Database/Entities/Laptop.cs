@@ -3,7 +3,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 {
-    public class UserLaptop : BaseEntity
+    public class Laptop : BaseEntity
     {
         public Guid? UserId { get; set; }
 

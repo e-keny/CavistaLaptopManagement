@@ -71,7 +71,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             }
 
 
-            var userLaptop = await context.UserLaptops
+            var userLaptop = await context.Laptops
                 .Where(x => x.UserId == currentUser.Id && !x.IsDeprecated)
                 .FirstOrDefaultAsync(token);
 

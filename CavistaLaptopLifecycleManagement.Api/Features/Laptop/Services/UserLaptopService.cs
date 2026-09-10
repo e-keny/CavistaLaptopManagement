@@ -18,23 +18,23 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Database.Entities.UserLaptop?>> GetUserLaptopsAsync(Guid userId, CLMDbContext context)
+        public async Task<IEnumerable<Database.Entities.Laptop?>> GetUserLaptopsAsync(Guid userId, CLMDbContext context)
         {
-            var userLaptops = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).ToListAsync();
+            var userLaptops = await context.Laptops.Where(x => x.UserId == userId && !x.IsDeprecated).ToListAsync();
 
             return userLaptops;
         }
 
-        public async Task<Database.Entities.UserLaptop?> GetLaptopByUserIdAsync(Guid userId, CLMDbContext context)
+        public async Task<Database.Entities.Laptop?> GetLaptopByUserIdAsync(Guid userId, CLMDbContext context)
         {
-            var userLaptop = await context.UserLaptops.Where(x => x.UserId == userId && !x.IsDeprecated).FirstOrDefaultAsync();
+            var userLaptop = await context.Laptops.Where(x => x.UserId == userId && !x.IsDeprecated).FirstOrDefaultAsync();
 
             return userLaptop;
         }
 
-        public async Task<Database.Entities.UserLaptop?> GetUserLaptopAsync(Guid laptopId, CLMDbContext context)
+        public async Task<Database.Entities.Laptop?> GetUserLaptopAsync(Guid laptopId, CLMDbContext context)
         {
-            var userLaptops = await context.UserLaptops.Where(x => x.Id == laptopId && !x.IsDeprecated).FirstOrDefaultAsync();
+            var userLaptops = await context.Laptops.Where(x => x.Id == laptopId && !x.IsDeprecated).FirstOrDefaultAsync();
 
             return userLaptops;
         }
@@ -55,7 +55,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
 
         public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
         {
-            var userLaptops = from userLaptop in _context.UserLaptops                
+            var userLaptops = from userLaptop in _context.Laptops                
                 where !userLaptop.IsDeprecated
                 join user in _context.Users on userLaptop.UserId equals user.Id into users
                 from curUser in users.DefaultIfEmpty()

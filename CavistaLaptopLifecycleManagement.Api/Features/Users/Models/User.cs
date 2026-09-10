@@ -45,7 +45,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 EmailAddress = u.EmailAddress,
                 IsActive = u.IsActive,
                 Role = u.Role,
-                UserLaptops = u.UserLaptops.Where(x => !x.IsDeprecated).Select(x => new UserLaptop 
+                UserLaptops = u.Laptops.Where(x => !x.IsDeprecated).Select(x => new UserLaptop 
                 {
                     Id = x.Id,
                     UserId = x.UserId,
