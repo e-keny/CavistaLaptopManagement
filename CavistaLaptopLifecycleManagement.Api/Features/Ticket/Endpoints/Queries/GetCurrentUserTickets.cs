@@ -57,6 +57,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                      Id = ticket.Id,
                                      Comment = ticket.Comment,
                                      AssignedTo = user.FirstName,
+                                     AssignedEmail = user.EmailAddress,
                                      OwnerId = LaptopOwner != null ? LaptopOwner.Id : null,
                                      OwnerName = LaptopOwner != null ? $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}" : string.Empty,
                                      TicketStatus = ticket.TicketStatus
@@ -78,7 +79,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
             var commentLookUp = ticketCommentList.ToLookup(x => x.TicketId);
 
-            var pagedResult = await PaginatedList<TicketCommentDetail>.CreateAsync(userTicketList, request.pageNumber ?? 1, request.pageSize ?? 10);
+            var pagedResult = await PaginatedList<TicketCommentDetail>.CreateAsync(userTicketList, request?.pageNumber ?? 1, request?.pageSize ?? 10);
 
             foreach (var result in pagedResult.Item)
             {
