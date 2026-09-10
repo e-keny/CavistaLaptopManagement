@@ -60,7 +60,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                          Id = ticket.Id,
                          Comment = ticket.Comment,
                          AssignedTo = user.FirstName,
-                         AssignedEmail = user.EmailAddress,
+                         AssignedToEmail = user.EmailAddress,
                          OwnerId = LaptopOwner != null ? LaptopOwner.Id : null,
                          OwnerName = LaptopOwner != null ? $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}" : string.Empty,
                          TicketStatus = ticket.TicketStatus
