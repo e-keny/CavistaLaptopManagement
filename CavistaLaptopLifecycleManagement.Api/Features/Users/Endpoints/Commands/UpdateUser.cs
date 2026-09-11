@@ -12,30 +12,30 @@ using Serilog;
 namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
 {
     [Handler]
-    [MapPut("/{userID}")]
+    [MapPut("{userId}")]
     [MapGroup<UserMapGroup>]
     [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class UpdateUser
     {
-        public sealed record UpdateUserBody
+        public sealed record Body
         {
-            public Role Role { get; init; }
+            public required Role Role { get; set; }
         }
 
-        public sealed record Command
+        public sealed partial record UpdateUserBody
         {
             [FromRoute]
-            public required Guid UserID { get; init; }
+            public required Guid userId { get; set; }
 
             [FromBody]
-            public required UpdateUserBody Body { get; init; }
+            public required Body Body { get; set; }
         }
 
         public sealed record UpdateUserResponse
         {
-            public Guid? userId { get; init; }
+            public Guid? userId { get; set; }
 
-            public string Message { get; init; }
+            public string Message { get; set; }
 
             public UpdateUserResponse(string message)
             {
@@ -51,7 +51,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
         }
 
         private async static ValueTask<Results<Ok<UpdateUserResponse>, BadRequest<UpdateUserResponse>, UnauthorizedHttpResult>> HandleAsync(
-            Command command,
+            UpdateUserBody command,
             AuditTrailService auditTrailService,
             CLMDbContext context,
             UserService userService,
@@ -64,7 +64,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 return TypedResults.Unauthorized(); ;
             }
 
-            var existingUser = await userService.GetUserAsync(command.UserID, context);
+            var existingUser = await userService.GetUserAsync(command.userId, context);
 
             if (existingUser == null)
             {

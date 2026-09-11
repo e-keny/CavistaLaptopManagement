@@ -37,26 +37,26 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             public required UpdateLaptopBody Body { get; init; }
         }
 
-        public sealed record UpdateUserResponse
+        public sealed record UpdateLaptopResponse
         {
             public Guid? LaptopId { get; init; }
 
             public string Message { get; init; }
 
-            public UpdateUserResponse(string message)
+            public UpdateLaptopResponse(string message)
             {
                 Message = message;
                 LaptopId = null;
             }
 
-            public UpdateUserResponse(Guid id)
+            public UpdateLaptopResponse(Guid id)
             {
                 Message = "successful";
                 LaptopId = id;
             }
         }
 
-        private async static ValueTask<Results<Ok<UpdateUserResponse>, BadRequest<UpdateUserResponse>, UnauthorizedHttpResult, StatusCodeHttpResult>> HandleAsync(
+        private async static ValueTask<Results<Ok<UpdateLaptopResponse>, BadRequest<UpdateLaptopResponse>, UnauthorizedHttpResult, StatusCodeHttpResult>> HandleAsync(
             Command command,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
@@ -69,7 +69,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
             if (requestBody.Status == UserLaptopHistoryStatus.Assigned && (requestBody.UserID == null || requestBody.UserID == Guid.Empty))
             {
-                return TypedResults.BadRequest(new UpdateUserResponse("User Id must have a value"));
+                return TypedResults.BadRequest(new UpdateLaptopResponse("User Id must have a value"));
             }
 
             var CurrentUser = await userService.GetCurrentUserAsync();
@@ -81,14 +81,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
             if (!Enum.IsDefined(typeof(UserLaptopHistoryStatus), requestBody.Status))
             {
-                return TypedResults.BadRequest(new UpdateUserResponse("Status does not exist"));
+                return TypedResults.BadRequest(new UpdateLaptopResponse("Status does not exist"));
             }
 
             var existingLaptop = await userLaptopService.GetUserLaptopAsync(command.laptopId, context);
 
             if (existingLaptop == null)
             {
-                return TypedResults.BadRequest(new UpdateUserResponse("Laptop not found"));
+                return TypedResults.BadRequest(new UpdateLaptopResponse("Laptop not found"));
             }
 
             var existingLastLaptopStatus = await userLaptopService.GetLaptopLastStatusAsync(command.laptopId, context);
@@ -103,14 +103,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
                     if (existingUser == null)
                     {
-                        return TypedResults.BadRequest(new UpdateUserResponse("User not found"));
+                        return TypedResults.BadRequest(new UpdateLaptopResponse("User not found"));
                     }
 
                     var existingUserLaptops = await userLaptopService.GetUserLaptopsAsync(userId, context);
 
                     if (existingUserLaptops.Any())
                     {
-                        return TypedResults.BadRequest(new UpdateUserResponse("User currently has a laptop, please first unassign the current one"));
+                        return TypedResults.BadRequest(new UpdateLaptopResponse("User currently has a laptop, please first unassign the current one"));
                     }
 
                     existingLaptop.UserId = requestBody.UserID;
@@ -157,7 +157,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
             {
                 if (await context.SaveChangesAsync() > 0)
                 {                   
-                    return TypedResults.Ok(new UpdateUserResponse(existingLaptop.Id));
+                    return TypedResults.Ok(new UpdateLaptopResponse(existingLaptop.Id));
                 }
             }
             catch (Exception ex)
@@ -165,7 +165,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                 Log.Error($"An error occurred => {ex.Message}");
             }
 
-            return TypedResults.BadRequest(new UpdateUserResponse("An error occurred while trying to update a laptop"));
+            return TypedResults.BadRequest(new UpdateLaptopResponse("An error occurred while trying to update a laptop"));
         }
     }
 }
