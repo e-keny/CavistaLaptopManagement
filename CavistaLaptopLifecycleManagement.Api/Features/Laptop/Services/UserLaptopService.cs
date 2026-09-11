@@ -3,6 +3,7 @@ using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
+using CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,10 +54,19 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             return userLastLaptopHistory;
         }
 
-        public async ValueTask<PaginatedList<Models.Laptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
+        public async ValueTask<PaginatedList<Models.Laptop>> GetUserLaptopsAsync(string searchString, int? pageNumber = 1, int? pageSize = 10)
         {
+            bool searchStringIsNullOrEmpty = true;
+            var term = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                term = searchString;
+                searchStringIsNullOrEmpty = false;
+            }
+
             var laptops = from userLaptop in _context.Laptops                
-                where !userLaptop.IsDeprecated
+                where !userLaptop.IsDeprecated && (searchStringIsNullOrEmpty || userLaptop.AssetName.Contains(searchString) || userLaptop.LaptopNumber.Contains(searchString))
                 join user in _context.Users on userLaptop.UserId equals user.Id into users
                 from curUser in users.DefaultIfEmpty()
                 select new Models.Laptop

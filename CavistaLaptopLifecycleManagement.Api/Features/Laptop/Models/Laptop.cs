@@ -66,8 +66,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
             }).ToList() : new List<LaptopHistory>()
         };
-        }
-
+     }
 
     [RouteGroup("api/laptops")]
     public sealed partial class LaptopMapGroup

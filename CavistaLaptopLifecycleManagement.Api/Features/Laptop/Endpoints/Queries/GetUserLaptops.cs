@@ -12,14 +12,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [MapGroup<LaptopMapGroup>]
     public static partial class GetUserLaptops
     {
-        public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
+        public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize, [FromQuery] string? searchString);
 
         private async static ValueTask<PaginatedList<Models.Laptop>> HandleAsync(
             Query request,
             UserLaptopService userLaptopService,
             CancellationToken token)
         {
-            var userLaptop = await userLaptopService.GetUserLaptopsAsync(request.pageNumber ?? 1, request.pageSize ?? 10);
+            var userLaptop = await userLaptopService.GetUserLaptopsAsync(request?.searchString ?? string.Empty, request?.pageNumber ?? 1, request?.pageSize ?? 10);
 
             return userLaptop;
         }

@@ -26,7 +26,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
             public  int? pageSize { get; set; }
 
             [FromQuery]
-            public required string? searchString { get; set; }
+            public string? searchString { get; set; }
         }
 
         private async static ValueTask<Results<Ok<PaginatedList<TicketCommentDetail>>, BadRequest>> HandleAsync(
