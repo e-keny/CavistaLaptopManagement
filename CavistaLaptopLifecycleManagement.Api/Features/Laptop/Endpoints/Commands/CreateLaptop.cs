@@ -16,7 +16,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [Handler]
     [MapPost("create")]
     [MapGroup<LaptopMapGroup>]
-    [Authorize(Policy = Policies.ITRolePolicy)]
+    //[Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class CreateLaptop
     {
         [Validate]
@@ -42,10 +42,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             [NotEmpty]
             public required decimal Price { get; init; }
 
-            public string Currency { get; set; }
+            public string? Currency { get; set; }
 
-            [FromForm]
-            public IFormFile Receipt { get; set; }
+            public string? Receipt { get; set; }
 
 
             public  DateTimeOffset EstimationUsefulLifeYear { get; init; }
@@ -95,8 +94,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 EmployeeDepartment = requestBody.EmployeeDepartment,
                 Price = requestBody.Price,
                 LaptopNumber = requestBody.LaptopNumber,
-                Currency = requestBody.Currency,
-                Receipt = requestBody?.Receipt?.Name ?? string.Empty,
+                Currency = requestBody?.Currency ?? "NGN",
+                Receipt = requestBody?.Receipt ?? string.Empty,
                 EstimationUsefulLifeYear = requestBody?.EstimationUsefulLifeYear.ToUniversalTime(),
                 DepreciationEstimationDate = requestBody?.DepreciationEstimationDate.ToUniversalTime(),
                 WarrantyExpirationDate = requestBody?.WarrantyExpirationDate.ToUniversalTime(),
