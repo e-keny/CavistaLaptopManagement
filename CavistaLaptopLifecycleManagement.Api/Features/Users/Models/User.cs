@@ -1,5 +1,4 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
-using CavistaLaptopLifecycleManagement.Api.Features.Shared.Extensions;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using Immediate.Apis.Shared;
 using System.Linq.Expressions;
@@ -27,7 +26,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
 
         public Role Role { get; set; }
 
-        public IReadOnlyList<UserLaptop> UserLaptops { get; set; }
+        public IReadOnlyList<Laptop.Models.Laptop> UserLaptops { get; set; }
 
         public bool Equals(User? other) =>
             other != null
@@ -45,7 +44,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                 EmailAddress = u.EmailAddress,
                 IsActive = u.IsActive,
                 Role = u.Role,
-                UserLaptops = u.Laptops.Where(x => !x.IsDeprecated).Select(x => new UserLaptop 
+                UserLaptops = u.Laptops.Where(x => !x.IsDeprecated).Select(x => new Laptop.Models.Laptop
                 {
                     Id = x.Id,
                     UserId = x.UserId,

@@ -1,8 +1,8 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
-using CavistaLaptopLifecycleManagement.Api.Database.Entities;
-using CavistaLaptopLifecycleManagement.Api.Features.Users.Models;
+using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
@@ -14,15 +14,18 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly CLMDbContext cLMDbContext;
+        private readonly AppSettings _appSettings;
 
         public UserService(
             IHttpContextAccessor httpContextAccessor,
-            CLMDbContext cLMDbContext
+            CLMDbContext cLMDbContext,
+             IOptions<AppSettings> options
             //UserRolesCache userRolesCache
             )
         {
             this.httpContextAccessor = httpContextAccessor;
             this.cLMDbContext = cLMDbContext;
+            _appSettings = options.Value;
         }
 
         public async ValueTask<Models.User?> GetCurrentUserAsync()
@@ -40,7 +43,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
                     return currentUser;
                 }
 
-                return default;
+                if (_appSettings.IsSwaggerCall)
+                {
+                    var currentUser = cLMDbContext.Users.
+                             Where(x => x.Id == _appSettings.CurrentUserId && !x.IsDeprecated)
+                             .Select(Models.User.FromDatabaseEntity).FirstOrDefault();
+
+                    return currentUser;
+                }
             }
 
             return default;
@@ -56,70 +66,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Services
             var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated).FirstOrDefaultAsync();
 
             return user;
-        }
-
-
-        //public async ValueTask<bool> IsAuthorized(string policy)
-        //{
-        //    if (await GetCurrentUser() is not { } user)
-        //        return false;
-
-        //    user = new(
-        //        user
-        //            .Identities
-        //            .Where(i => i.AuthenticationType is not "Roles-Cache")
-        //            .Append(
-        //                await GetRoleClaimsIdentity(user)
-        //            )
-        //    );
-
-        //    var auth = await authorizationService.AuthorizeAsync(user, policy);
-        //    return auth.Succeeded;
-        //}
-
-        //public async ValueTask<bool> IsAdmin()
-        //{
-        //    var userId = await GetCurrentUserId();
-        //    var roles = await userRolesCache.GetValue(new() { UserId = userId, }, CancellationToken.None);
-        //    return roles.Contains("Admin", StringComparer.OrdinalIgnoreCase);
-        //}
-
-        //public async ValueTask<bool> IsInRole(string role)
-        //{
-        //    var userId = await GetCurrentUserId();
-        //    var roles = await userRolesCache.GetValue(new() { UserId = userId, }, CancellationToken.None);
-        //    return roles.Contains("Admin", StringComparer.OrdinalIgnoreCase) || roles.Contains(role, StringComparer.OrdinalIgnoreCase);
-        //}
-
-        //public async Task<ClaimsIdentity> GetRoleClaimsIdentity(ClaimsPrincipal principal)
-        //{
-        //    var claim = principal.FindFirstValue(Claims.Id) ?? "";
-        //    if (!UserId.TryParse(claim, provider: null, out var userId))
-        //        return new([], authenticationType: "Roles-Cache");
-
-        //    var roles = await userRolesCache.GetValue(new() { UserId = userId, }, CancellationToken.None);
-
-        //    return new(
-        //        principal.Claims
-        //            .Where(c => !string.Equals(c.Type, ClaimTypes.Role, StringComparison.Ordinal))
-        //            .Concat(
-        //                roles
-        //                    .Select(r => new Claim(ClaimTypes.Role, r))
-        //            ),
-        //        authenticationType: "Roles-Cache"
-        //    );
-        //}
-
-        //public async ValueTask<UserId> GetCurrentUserId()
-        //{
-        //    var user = await GetCurrentUser();
-
-        //    var claim = user?.FindFirstValue(Claims.Id) ?? "";
-        //    if (!UserId.TryParse(claim, provider: null, out var userId))
-        //        ThrowInvalidUserId(claim);
-
-        //    return userId;
-        //}
+        }        
 
         [StackTraceHidden]
             [DoesNotReturn]

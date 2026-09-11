@@ -10,8 +10,6 @@ using Scalar.AspNetCore;
 using System.Security.Claims;
 using Microsoft.OpenApi.Models;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
@@ -30,6 +28,7 @@ builder.Services.AddAuthorization(options =>
        policy.Requirements.Add(new ITRoleRequirement(ClaimTypes.NameIdentifier)));
 });
 
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -62,7 +61,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 
 builder.Services.AddDbContextPool<CLMDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DBConnection")));

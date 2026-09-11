@@ -20,7 +20,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Models
 
         public string? TicketHistoryStatus { get; set; }
 
-        public Laptop.Models.UserLaptop UserLaptop { get; set; }
+        public Laptop.Models.Laptop UserLaptop { get; set; }
 
         public DateTimeOffset Created_At { get; set; }
     }

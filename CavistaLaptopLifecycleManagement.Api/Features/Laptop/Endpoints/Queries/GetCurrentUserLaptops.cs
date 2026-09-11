@@ -17,7 +17,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
-        private async static ValueTask<Results<Ok<PaginatedList<UserLaptop>>, UnauthorizedHttpResult>> HandleAsync(
+        private async static ValueTask<Results<Ok<PaginatedList<Models.Laptop>>, UnauthorizedHttpResult>> HandleAsync(
             Query request,
             CLMDbContext context,
             UserService userService,
@@ -35,7 +35,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                               && userLaptop.UserId == currentUser.Id
                               join user in context.Users on userLaptop.UserId equals user.Id into users
                               from curUser in users.DefaultIfEmpty()
-                              select new UserLaptop
+                              select new Models.Laptop
                               {
                                   Id = userLaptop.Id,
                                   UserId = userLaptop.UserId,
@@ -51,10 +51,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                                   PurchaseYear = userLaptop.PurchaseYear,
                                   status = userLaptop.UserLaptopStatus,
                                   AssignedToEmail = curUser.EmailAddress,
-                                  AssignedToName = curUser.FullName
+                                  AssignedToName = curUser.FullName,
+                                  Currency = userLaptop.Currency,
+                                  Receipt = userLaptop.Receipt,
                               };
 
-            var pagedResult = await PaginatedList<UserLaptop>.CreateAsync(userLaptops, request.pageNumber ?? 1, request.pageSize ?? 10);
+            var pagedResult = await PaginatedList<Models.Laptop>.CreateAsync(userLaptops, request.pageNumber ?? 1, request.pageSize ?? 10);
 
             var listOfLaptopIds = pagedResult.Item.Select(x => x.Id).ToList();
 

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 {
@@ -18,7 +17,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [MapPost("create")]
     [MapGroup<LaptopMapGroup>]
     [Authorize(Policy = Policies.ITRolePolicy)]
-    public static partial class CreateUserLaptop
+    public static partial class CreateLaptop
     {
         [Validate]
         public sealed partial record CreateLaptopBody : IValidationTarget<CreateLaptopBody>
@@ -34,12 +33,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             [NotEmpty]
             public required string AssetLocation { get; init; }
-
-            [NotEmpty]
+            
             public required string EmployeeDepartment { get; init; }
 
             [NotEmpty]
             public required decimal Price { get; init; }
+
+            public string Currency { get; set; }
+
+            public string Receipt { get; set; }
+
 
             public  DateTimeOffset EstimationUsefulLifeYear { get; init; }
 
@@ -57,12 +60,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             public required CreateLaptopBody Body { get; init; }
         }
 
-        public sealed record Response
+        public sealed record CreateLaptopResponse
         {
             public required Guid LaptopId { get; init; }
         }
 
-        private async static  ValueTask<Results<Ok<Response>, BadRequest, UnauthorizedHttpResult>> HandleAsync(
+        private async static  ValueTask<Results<Ok<CreateLaptopResponse>, BadRequest, UnauthorizedHttpResult>> HandleAsync(
             Command command,
             UserLaptopService userLaptopService,
             AuditTrailService auditTrailService,
@@ -103,7 +106,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
-                    return TypedResults.Ok(new Response { LaptopId = laptopToAdd.Id });
+                    return TypedResults.Ok(new CreateLaptopResponse { LaptopId = laptopToAdd.Id });
                 }
             }
             catch (Exception ex)

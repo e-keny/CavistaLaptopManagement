@@ -54,7 +54,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
                     HasIndex(user => user.Auth0UserId, "Idx_User_Auth0UserId");
 
             modelBuilder.Entity<Laptop>().
-                    HasIndex(userLaptop => userLaptop.UserId, "Idx_UserLaptop_UserId");
+                    HasIndex(userLaptop => userLaptop.UserId, "Idx_Laptop_UserId");
         }
     }
 }

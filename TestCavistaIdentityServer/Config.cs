@@ -28,6 +28,7 @@ namespace TestCavistaIdentityServer
                 {
                     ClientId = "m2m.client",
                     ClientName = "Client Credentials Client",
+                    AccessTokenLifetime = 7200, //2hr
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
@@ -42,6 +43,7 @@ namespace TestCavistaIdentityServer
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
+                    AccessTokenLifetime = 7200, //2hr
 
                     RedirectUris = { "https://localhost:44300/signin-oidc" },
                     FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
@@ -57,6 +59,8 @@ namespace TestCavistaIdentityServer
                         ClientSecrets = { new Secret("secret".Sha256()) },
 
                         AllowedGrantTypes = GrantTypes.Code,
+
+                        AccessTokenLifetime = 7200, //2hr
 
                         // where to redirect to after login
                        RedirectUris = 

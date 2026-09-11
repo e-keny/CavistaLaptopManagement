@@ -17,7 +17,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
     [MapPut("update/{laptopId}")]
     [MapGroup<LaptopMapGroup>]
     [Authorize(Policy = Policies.ITRolePolicy)]
-    public static partial class UpdateUserLaptop
+    public static partial class UpdateLaptop
     {
         public sealed record UpdateLaptopBody
         {

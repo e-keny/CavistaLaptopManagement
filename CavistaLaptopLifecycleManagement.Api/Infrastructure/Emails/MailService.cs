@@ -15,6 +15,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Infrastructure.Emails
     public class MailService
     {
         private readonly AppSettings _appSettings;
+
         public MailService(IOptions<AppSettings> options)
         {
             _appSettings = options.Value;

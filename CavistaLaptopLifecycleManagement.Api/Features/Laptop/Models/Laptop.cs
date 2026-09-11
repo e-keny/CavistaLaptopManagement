@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 {
-    public class UserLaptop
+    public class Laptop
     {
         public Guid Id { get; set; }
         public Guid? UserId { get; set; }
@@ -27,6 +27,10 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public Decimal Price { get; set; }
 
+        public string Currency { get; set; }
+
+        public string Receipt { get; set; }
+
         public DateTimeOffset? EstimationUsefulLifeYear { get; set; }
 
         public DateTimeOffset? DepreciationEstimationDate { get; set; }
@@ -37,7 +41,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public List<LaptopHistory> LaptopHistories { get; set; }
 
-        public static readonly Expression<Func<Database.Entities.Laptop, UserLaptop>> FromDatabaseEntity =
+        public static readonly Expression<Func<Database.Entities.Laptop, Models.Laptop>> FromDatabaseEntity =
         u => new()
         {
             Id = u.Id,

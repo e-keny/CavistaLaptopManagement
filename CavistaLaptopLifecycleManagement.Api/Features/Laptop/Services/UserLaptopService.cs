@@ -53,13 +53,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             return userLastLaptopHistory;
         }
 
-        public async ValueTask<PaginatedList<Models.UserLaptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
+        public async ValueTask<PaginatedList<Models.Laptop>> GetUserLaptopsAsync(int? pageNumber = 1, int? pageSize = 10)
         {
-            var userLaptops = from userLaptop in _context.Laptops                
+            var laptops = from userLaptop in _context.Laptops                
                 where !userLaptop.IsDeprecated
                 join user in _context.Users on userLaptop.UserId equals user.Id into users
                 from curUser in users.DefaultIfEmpty()
-                select new Models.UserLaptop
+                select new Models.Laptop
                 {
                     Id = userLaptop.Id,
                     UserId = userLaptop.UserId,
@@ -75,10 +75,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                     PurchaseYear = userLaptop.PurchaseYear,
                     status = userLaptop.UserLaptopStatus,
                     AssignedToEmail = curUser.EmailAddress,
-                    AssignedToName = curUser.FullName
+                    AssignedToName = curUser.FullName,
+                    Currency = userLaptop.Currency,
+                    Receipt = userLaptop.Receipt,                              
                 };
 
-            var pagedResult = await PaginatedList<Models.UserLaptop>.CreateAsync(userLaptops, pageNumber ?? 1, pageSize ?? 10);
+            var pagedResult = await PaginatedList<Models.Laptop>.CreateAsync(laptops, pageNumber ?? 1, pageSize ?? 10);
 
             var listOfLaptopIds = pagedResult.Item.Select(x => x.Id).ToList();
 

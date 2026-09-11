@@ -14,7 +14,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     {
         public record Query([FromQuery] int? pageNumber, [FromQuery] int? pageSize);
 
-        private async static ValueTask<PaginatedList<UserLaptop>> HandleAsync(
+        private async static ValueTask<PaginatedList<Models.Laptop>> HandleAsync(
             Query request,
             UserLaptopService userLaptopService,
             CancellationToken token)
