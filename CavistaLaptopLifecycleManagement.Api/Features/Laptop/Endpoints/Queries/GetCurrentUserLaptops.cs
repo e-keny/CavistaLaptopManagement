@@ -54,6 +54,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                                   AssignedToName = curUser.FullName,
                                   Currency = userLaptop.Currency,
                                   Receipt = userLaptop.Receipt,
+                                  LaptopNumber = userLaptop.LaptopNumber
                               };
 
             var pagedResult = await PaginatedList<Models.Laptop>.CreateAsync(userLaptops, request.pageNumber ?? 1, request.pageSize ?? 10);

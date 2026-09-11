@@ -13,6 +13,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public string Model { get; set; }
 
+        public string LaptopNumber { get; init; }
+
         public string Comment { get; set; }
 
         public string AssetLocation { get; set; }

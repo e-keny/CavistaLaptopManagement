@@ -29,6 +29,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             public required string Model { get; init; }
 
             [NotEmpty]
+            public required string LaptopNumber { get; init; }
+
+            [NotEmpty]
             public required string Comment { get; init; }
 
             [NotEmpty]

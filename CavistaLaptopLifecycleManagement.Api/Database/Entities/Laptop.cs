@@ -11,6 +11,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string Model { get; set; }
 
+        public string LaptopNumber { get; set; }
+
         public string Comment { get; set; }
 
         public string AssetLocation { get; set; }

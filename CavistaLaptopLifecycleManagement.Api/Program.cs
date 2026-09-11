@@ -6,13 +6,23 @@ using CavistaLaptopLifecycleManagement.Api.Features.Users.Services.Requirements;
 using CavistaLaptopLifecycleManagement.Api.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
-using System.Security.Claims;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
+using Serilog;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
+
+var mongoUrl = configuration["Logging:Logging"];
+
+if (!string.IsNullOrWhiteSpace(mongoUrl))
+{
+    var logger = new LoggerConfiguration()
+    .WriteTo.MongoDB(mongoUrl, collectionName: "AppLogs")
+    .CreateLogger();
+}
 
 builder.Services.AddAuthentication()
     .AddJwtBearer(option =>
