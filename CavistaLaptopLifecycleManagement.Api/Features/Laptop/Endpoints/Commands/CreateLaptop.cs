@@ -44,7 +44,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             public string Currency { get; set; }
 
-            public string Receipt { get; set; }
+            public IFormFile Receipt { get; set; }
 
 
             public  DateTimeOffset EstimationUsefulLifeYear { get; init; }
@@ -93,10 +93,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 AssetLocation = requestBody.AssetLocation,
                 EmployeeDepartment = requestBody.EmployeeDepartment,
                 Price = requestBody.Price,
-                EstimationUsefulLifeYear = requestBody.EstimationUsefulLifeYear.ToUniversalTime(),
-                DepreciationEstimationDate = requestBody.DepreciationEstimationDate.ToUniversalTime(),
-                WarrantyExpirationDate = requestBody.WarrantyExpirationDate.ToUniversalTime(),
-                PurchaseYear = requestBody.PurchaseYear.ToUniversalTime(),
+                LaptopNumber = requestBody.LaptopNumber,
+                Currency = requestBody.Currency,
+                Receipt = requestBody?.Receipt?.Name ?? string.Empty,
+                EstimationUsefulLifeYear = requestBody?.EstimationUsefulLifeYear.ToUniversalTime(),
+                DepreciationEstimationDate = requestBody?.DepreciationEstimationDate.ToUniversalTime(),
+                WarrantyExpirationDate = requestBody?.WarrantyExpirationDate.ToUniversalTime(),
+                PurchaseYear = requestBody?.PurchaseYear.ToUniversalTime(),
                 Created_At = DateTime.UtcNow.ToUniversalTime(),
                 Modified = DateTime.UtcNow.ToUniversalTime()
             };
