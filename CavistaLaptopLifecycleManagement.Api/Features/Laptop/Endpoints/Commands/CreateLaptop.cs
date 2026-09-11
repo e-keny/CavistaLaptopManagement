@@ -59,7 +59,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
         [Validate]
         public sealed partial record Command : IValidationTarget<Command>
         {
-            [FromBody]
+            [FromForm]
             public required CreateLaptopBody Body { get; init; }
         }
 
