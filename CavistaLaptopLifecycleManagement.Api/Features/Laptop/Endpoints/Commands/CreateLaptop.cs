@@ -16,7 +16,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
     [Handler]
     [MapPost("create")]
     [MapGroup<LaptopMapGroup>]
-    //[Authorize(Policy = Policies.ITRolePolicy)]
+    [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class CreateLaptop
     {
         [Validate]

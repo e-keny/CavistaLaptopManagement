@@ -74,7 +74,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
     {
         private static void CustomizeGroup(RouteGroupBuilder group)
             => group
-                //.RequireAuthorization()
+                .RequireAuthorization()
                 .WithTags("Laptops");
     }
 }
