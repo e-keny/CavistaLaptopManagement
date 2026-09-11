@@ -44,6 +44,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             public string Currency { get; set; }
 
+            [FromForm]
             public IFormFile Receipt { get; set; }
 
 
@@ -59,7 +60,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
         [Validate]
         public sealed partial record Command : IValidationTarget<Command>
         {
-            [FromForm]
+            [FromBody]
             public required CreateLaptopBody Body { get; init; }
         }
 
