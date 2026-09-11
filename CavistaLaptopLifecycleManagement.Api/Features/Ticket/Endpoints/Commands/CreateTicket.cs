@@ -86,6 +86,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 Comment = request.Body.Comment,
                 UserId = currentUser.Id, 
                 LaptopId = userLaptop.Id,
+                TicketNumber = UtilityService.GenerateHybridId("CLM"),
                 Created_At = DateTime.UtcNow,
                 Modified = DateTime.UtcNow,
             };
@@ -105,14 +106,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
 
             await auditTrailService.AddAuditTrailAsync(context, currentUser.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Ticket, ticketToAdd.Id);
 
-            var notificationMessage = $"There is an available ticket waiting to be treated";
-
-            _ = Task.Run(() => notificationService.NotifyIT(notificationMessage));
-
             try
             {
                 if (await context.SaveChangesAsync() > 0)
                 {
+                    var notificationMessage = $"There is an available ticket waiting to be treated";
+
+                    _ = Task.Run(() => notificationService.NotifyIT(notificationMessage));
+
                     return TypedResults.Ok(new CreateTicketResponse(ticketToAdd.Id));
                 }
             }

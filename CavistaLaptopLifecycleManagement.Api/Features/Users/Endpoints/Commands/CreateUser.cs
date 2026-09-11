@@ -83,7 +83,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Endpoints.Commands
                 FirstName = requestBody.FirstName,
                 LastName = requestBody.LastName,
                 MiddleName = requestBody.MiddleName,
-                Role = requestBody.Role,                
+                Role = requestBody.Role,         
+                IsActive = true,
                 Created_At = DateTime.UtcNow.ToUniversalTime(),
                 Modified = DateTime.UtcNow.ToUniversalTime()
             };

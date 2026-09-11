@@ -32,7 +32,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                  from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                                  select new TicketCommentDetail
                                  {
-                                     TicketNumber = $"CLM-{ticket.TicketNumber:D8}",
+                                     TicketNumber = ticket.TicketNumber,
                                      UserLaptopID = laptop != null ? laptop.Id : null,
                                      Id = ticket.Id,
                                      Comment = ticket.Comment,
