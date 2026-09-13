@@ -24,7 +24,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //        EmailAddress = "AliceSmith@example.com",
             //        MiddleName = "Md",
             //        IsActive = true,
-            //        Role = Features.Users.Services.Role.IT,
+            //        Role = Features.Users.Services.Role.General,
             //        Created_At = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //        Modified = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //    },
@@ -36,7 +36,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //        EmailAddress = "BobSmith@example.com",
             //        MiddleName = "KC",
             //        IsActive = true,
-            //        Role = Features.Users.Services.Role.General,
+            //        Role = Features.Users.Services.Role.IT,
             //        Created_At = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //        Modified = DateTime.Parse("2026-08-23").ToUniversalTime()
             //    },
@@ -74,7 +74,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //    {
             //        UserId = users[1].Id,
             //        AssetName ="Chemistry",
-            //        Model = "Hp3113",
+            //        Model = "Hp499",
             //        Comment = "Super fast",
             //        AssetLocation = "Lagos, Nigeria",
             //        EmployeeDepartment = "Engineering",
