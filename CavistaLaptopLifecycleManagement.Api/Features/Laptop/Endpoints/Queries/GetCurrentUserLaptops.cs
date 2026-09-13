@@ -49,7 +49,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                                   DepreciationEstimationDate = userLaptop.DepreciationEstimationDate,
                                   WarrantyExpirationDate = userLaptop.WarrantyExpirationDate,
                                   PurchaseYear = userLaptop.PurchaseYear,
-                                  status = userLaptop.UserLaptopStatus,
+                                  status = userLaptop.LaptopStatus,
                                   AssignedToEmail = curUser.EmailAddress,
                                   AssignedToName = curUser.FullName,
                                   Currency = userLaptop.Currency,

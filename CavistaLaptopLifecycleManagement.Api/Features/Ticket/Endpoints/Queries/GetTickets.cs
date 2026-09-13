@@ -17,7 +17,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
     [Authorize(Policy = Policies.ITRolePolicy)]
     public static partial class GetTickets
     {        
-        public sealed class FetAllTickets
+        public sealed class GetAllTickets
         {
             [FromQuery]
             public int? pageNumber { get; set; }
@@ -30,7 +30,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
         }
 
         private async static ValueTask<Results<Ok<PaginatedList<TicketCommentDetail>>, BadRequest>> HandleAsync(
-            FetAllTickets request,
+            GetAllTickets request,
             CLMDbContext context,
             CancellationToken token)
         {
@@ -45,7 +45,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
             var userTicketList = from ticket in context.Tickets
                      where !ticket.IsDeprecated 
-                     && (searchStringIsNullOrEmpty || ticket.TicketNumber.Contains(searchString))
+                     && (searchStringIsNullOrEmpty || ticket.TicketNumber.ToLower().Contains(searchString.ToLower()))
                      join userLaptop in context.Laptops on ticket.LaptopId equals userLaptop.Id into laptopList
                      from laptop in laptopList.DefaultIfEmpty()
                      join user in context.Users on ticket.UserId equals user.Id

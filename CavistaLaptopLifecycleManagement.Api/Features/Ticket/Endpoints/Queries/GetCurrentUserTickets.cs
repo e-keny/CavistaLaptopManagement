@@ -42,7 +42,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
 
             var userTicketList = from ticket in context.Tickets
                                  where ticket.UserId == currentUser.Id
-                                 && (searchStringIsNullOrEmpty || ticket.TicketNumber.Contains(searchString))
+                                 && (searchStringIsNullOrEmpty || ticket.TicketNumber.ToLower().Contains(searchString.ToLower()))
                                  join userLaptop in context.Laptops on ticket.LaptopId equals userLaptop.Id into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
                                  join user in context.Users on ticket.UserId equals user.Id

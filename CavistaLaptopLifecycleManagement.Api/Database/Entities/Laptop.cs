@@ -19,7 +19,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string EmployeeDepartment { get; set; }
 
-        public UserLaptopHistoryStatus UserLaptopStatus { get; set; }
+        public LaptopHistoryStatus LaptopStatus { get; set; }
 
         public Decimal Price { get; set; }
 

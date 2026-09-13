@@ -57,7 +57,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
                     DepreciationEstimationDate = x.DepreciationEstimationDate,
                     WarrantyExpirationDate = x.WarrantyExpirationDate,
-                    status = x.UserLaptopStatus,
+                    status = x.LaptopStatus,
                     AssignedToEmail = u.EmailAddress,
                     AssignedToName = u.FullName,
                     PurchaseYear = x.PurchaseYear,

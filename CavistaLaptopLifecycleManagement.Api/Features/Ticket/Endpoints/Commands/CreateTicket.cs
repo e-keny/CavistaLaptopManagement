@@ -87,6 +87,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 UserId = currentUser.Id, 
                 LaptopId = userLaptop.Id,
                 TicketNumber = UtilityService.GenerateHybridId("CLM"),
+                TicketStatus = TicketHistoryStatus.Open,
                 Created_At = DateTime.UtcNow,
                 Modified = DateTime.UtcNow,
             };

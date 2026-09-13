@@ -23,7 +23,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
         {
             public Guid? UserID { get; init; }
 
-            public required UserLaptopHistoryStatus Status { get; init; }
+            public required LaptopHistoryStatus Status { get; init; }
 
             public string? Comment { get; init; }
         }
@@ -67,7 +67,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
         {
             var requestBody = command.Body;
 
-            if (requestBody.Status == UserLaptopHistoryStatus.Assigned && (requestBody.UserID == null || requestBody.UserID == Guid.Empty))
+            if (requestBody.Status == LaptopHistoryStatus.Assigned && (requestBody.UserID == null || requestBody.UserID == Guid.Empty))
             {
                 return TypedResults.BadRequest(new UpdateLaptopResponse("User Id must have a value"));
             }
@@ -79,7 +79,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                 return TypedResults.Unauthorized(); ;
             }           
 
-            if (!Enum.IsDefined(typeof(UserLaptopHistoryStatus), requestBody.Status))
+            if (!Enum.IsDefined(typeof(LaptopHistoryStatus), requestBody.Status))
             {
                 return TypedResults.BadRequest(new UpdateLaptopResponse("Status does not exist"));
             }
@@ -95,7 +95,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
             if (existingLastLaptopStatus == null || (existingLastLaptopStatus.UserLaptopHistoryStatus != requestBody.Status))
             {
-                if (requestBody.Status == UserLaptopHistoryStatus.Assigned)
+                if (requestBody.Status == LaptopHistoryStatus.Assigned)
                 {                  
                     var userId = requestBody.UserID.HasValue ? requestBody.UserID.Value : Guid.Empty;
 
@@ -114,17 +114,17 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                     }
 
                     existingLaptop.UserId = requestBody.UserID;
-                    existingLaptop.UserLaptopStatus = requestBody.Status;
+                    existingLaptop.LaptopStatus = requestBody.Status;
                 }
-                else if (requestBody.Status == UserLaptopHistoryStatus.UnAssigned)
+                else if (requestBody.Status == LaptopHistoryStatus.UnAssigned)
                 {
                     existingLaptop.UserId = null;
-                    existingLaptop.UserLaptopStatus = UserLaptopHistoryStatus.UnAssigned;
+                    existingLaptop.LaptopStatus = LaptopHistoryStatus.UnAssigned;
                 }
                 else
                 {
                     existingLaptop.UserId = null;
-                    existingLaptop.UserLaptopStatus = requestBody.Status;
+                    existingLaptop.LaptopStatus = requestBody.Status;
                 }
             }
             else

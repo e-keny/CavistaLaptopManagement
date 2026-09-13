@@ -66,7 +66,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
             }
 
             var laptops = from userLaptop in _context.Laptops                
-                where !userLaptop.IsDeprecated && (searchStringIsNullOrEmpty || userLaptop.AssetName.Contains(searchString) || userLaptop.LaptopNumber.Contains(searchString))
+                where !userLaptop.IsDeprecated && (searchStringIsNullOrEmpty || userLaptop.AssetName.ToLower().Contains(searchString.ToLower()) || userLaptop.LaptopNumber.ToLower().Contains(searchString.ToLower()))
                 join user in _context.Users on userLaptop.UserId equals user.Id into users
                 from curUser in users.DefaultIfEmpty()
                 select new Models.Laptop
@@ -83,7 +83,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services
                     DepreciationEstimationDate = userLaptop.DepreciationEstimationDate,
                     WarrantyExpirationDate = userLaptop.WarrantyExpirationDate,
                     PurchaseYear = userLaptop.PurchaseYear,
-                    status = userLaptop.UserLaptopStatus,
+                    status = userLaptop.LaptopStatus,
                     AssignedToEmail = curUser.EmailAddress,
                     AssignedToName = curUser.FullName,
                     Currency = userLaptop.Currency,

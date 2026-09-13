@@ -12,12 +12,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string? Comment { get; set; }
 
-        public UserLaptopHistoryStatus UserLaptopHistoryStatus { get; set; }
+        public LaptopHistoryStatus UserLaptopHistoryStatus { get; set; }
 
         public Laptop UserLaptop { get; set; }
     }
 
-    public enum UserLaptopHistoryStatus
+    public enum LaptopHistoryStatus
     {
         Available,
         Assigned,
