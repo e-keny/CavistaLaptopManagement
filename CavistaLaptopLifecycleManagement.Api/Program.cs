@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-var mongoUrl = configuration["Logging:Logging"];
+var mongoUrl = configuration["Logging:MongoURL"];
 
 if (!string.IsNullOrWhiteSpace(mongoUrl))
 {
@@ -27,7 +27,7 @@ if (!string.IsNullOrWhiteSpace(mongoUrl))
 builder.Services.AddAuthentication()
     .AddJwtBearer(option =>
     {
-        option.Authority = configuration["IdentityServer:Authority"];
+        option.Authority = configuration["AppSettings:IdentityAddress"];
         //option.Authority = "https://localhost:5001";
         option.TokenValidationParameters.ValidateAudience = false;
     });
