@@ -53,7 +53,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //    new Laptop
             //    {
             //        UserId = users[0].Id,
-            //        AssetName ="Chemistry",
+            //        AssetName ="Hp-765",
             //        Model = "Hp3113",
             //        Comment = "Super fast",
             //        AssetLocation = "Lagos, Nigeria",
@@ -73,7 +73,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //    new Laptop
             //    {
             //        UserId = users[1].Id,
-            //        AssetName ="Chemistry",
+            //        AssetName ="Hp-990",
             //        Model = "Hp499",
             //        Comment = "Super fast",
             //        AssetLocation = "Lagos, Nigeria",
