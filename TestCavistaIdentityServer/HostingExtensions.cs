@@ -61,8 +61,6 @@ namespace TestCavistaIdentityServer
                     {
                         options.Diagnostics.ChunkSize = 1024 * 1024 * 10; // 10 MB
                     }
-
-                    options.IssuerUri = "https://cavistatestidentityserver.onrender.com"; // Force HTTPS issuer
                 })
                 .AddTestUsers(TestUsers.Users)
                 .AddLicenseSummary();
