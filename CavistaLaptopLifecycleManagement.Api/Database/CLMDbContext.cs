@@ -26,7 +26,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Laptop>().ToTable("UserLaptops");
+            modelBuilder.Entity<Laptop>().ToTable("Laptops");
             modelBuilder.Entity<LaptopHistory>().ToTable("LaptopHistories");
             modelBuilder.Entity<Ticket>().ToTable("Tickets");
             modelBuilder.Entity<AuditTrail>().ToTable("AuditTrails");

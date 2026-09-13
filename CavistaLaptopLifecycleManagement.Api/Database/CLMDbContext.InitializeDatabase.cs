@@ -24,8 +24,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //        EmailAddress = "AliceSmith@example.com",
             //        MiddleName = "Md",
             //        IsActive = true,
-            //        LastLogin = DateTime.Parse("2026-08-23").ToUniversalTime(),
-            //        Roles = "",
+            //        Role = Features.Users.Services.Role.IT,
             //        Created_At = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //        Modified = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //    },
@@ -37,8 +36,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //        EmailAddress = "BobSmith@example.com",
             //        MiddleName = "KC",
             //        IsActive = true,
-            //        LastLogin = DateTime.Parse("2026-08-23").ToUniversalTime(),
-            //        Roles = "",
+            //        Role = Features.Users.Services.Role.General,
             //        Created_At = DateTime.Parse("2026-08-23").ToUniversalTime(),
             //        Modified = DateTime.Parse("2026-08-23").ToUniversalTime()
             //    },
@@ -50,17 +48,20 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //}
             //this.SaveChanges();
 
-            //var userLaptops = new UserLaptop[]
+            //var userLaptops = new Laptop[]
             //{
-            //    new UserLaptop
+            //    new Laptop
             //    {
-            //        UserID = users[0].Id,
+            //        UserId = users[0].Id,
             //        AssetName ="Chemistry",
             //        Model = "Hp3113",
             //        Comment = "Super fast",
             //        AssetLocation = "Lagos, Nigeria",
             //        EmployeeDepartment = "Engineering",
-            //        Condition = UserLaptopCondition.Active,
+            //        LaptopStatus = LaptopHistoryStatus.Available,
+            //        LaptopNumber = "CLM-rtyu89e90ww",
+            //        Currency = "NGN",
+            //        Receipt =  string.Empty,
             //        Price = 1000000,
             //        EstimationUsefulLifeYear = DateTime.UtcNow.AddYears(1).ToUniversalTime(),
             //        DepreciationEstimationDate =DateTime.UtcNow.AddYears(1).ToUniversalTime(),
@@ -69,15 +70,18 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //        Created_At = DateTime.UtcNow.ToUniversalTime(),
             //        Modified = DateTime.UtcNow.ToUniversalTime()
             //    },
-            //    new UserLaptop
+            //    new Laptop
             //    {
-            //        UserID = users[1].Id,
+            //        UserId = users[1].Id,
             //        AssetName ="Chemistry",
             //        Model = "Hp3113",
             //        Comment = "Super fast",
             //        AssetLocation = "Lagos, Nigeria",
             //        EmployeeDepartment = "Engineering",
-            //        Condition = UserLaptopCondition.Active,
+            //        LaptopStatus = LaptopHistoryStatus.Available,
+            //        LaptopNumber = "CLM-rtyu893873",
+            //        Currency = "NGN",
+            //        Receipt =  string.Empty,
             //        Price = 1000000,
             //        EstimationUsefulLifeYear = DateTime.UtcNow.AddYears(1).ToUniversalTime(),
             //        DepreciationEstimationDate =DateTime.UtcNow.AddYears(1).ToUniversalTime(),
@@ -88,11 +92,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
             //    }
             //};
 
-            //    foreach (UserLaptop userLaptop in userLaptops)
-            //    {
-            //        this.UserLaptops.Add(userLaptop);
-            //    }
-            //    this.SaveChanges();
-            }
+            //foreach (Laptop userLaptop in userLaptops)
+            //{
+            //    this.Laptops.Add(userLaptop);
+            //}
+            //this.SaveChanges();
         }
+    }
 }
