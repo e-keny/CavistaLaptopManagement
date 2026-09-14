@@ -31,7 +31,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await _context.Notifications.AddAsync(notificationToAdd);
+            await context.Notifications.AddAsync(notificationToAdd);
 
             var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
 
@@ -51,7 +51,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public async ValueTask NotifyAttendant(Guid attendantId, string message)
@@ -206,7 +206,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             _context.SaveChanges();
         }
 
-        public async ValueTask NotifyIT(string adminMessage)
+        public async ValueTask NotifyIT(string adminMessage, CLMDbContext context)
         {
             var adminList = await _context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
 
@@ -221,7 +221,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await _context.Notifications.AddAsync(attendantNotificationToAdd);
+                await context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -240,7 +240,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
     }
 }
