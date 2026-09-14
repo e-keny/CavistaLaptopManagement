@@ -134,12 +134,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
 
             await auditTrailService.AddAuditTrailAsync(context, CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Ticket, existingTicket.Id);
 
-            _ = Task.Run(() => notificationService.NotifyUser(existingTicket.UserId, notificationMessage));
-
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {                  
+                {
+                    _ = Task.Run(() => notificationService.NotifyUser(existingTicket.UserId, notificationMessage));
+
                     return TypedResults.Ok(new UpdateTicketResponse(existingTicket.Id));
                 }
             }

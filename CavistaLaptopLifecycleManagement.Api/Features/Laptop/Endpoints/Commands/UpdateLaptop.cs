@@ -146,17 +146,17 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
 
             await auditTrailService.AddAuditTrailAsync(context, CurrentUser.Id, AuditTrailService.AuditAction.Update, AuditTrailService.AuditOn.Laptop, existingLaptop.Id);
 
-            if (requestBody.UserID.HasValue)
-            {
-                var notificationMessage = $"{existingLaptop.AssetName} has been assigned to you";
-
-                _ = Task.Run(() => notificationService.NotifyUser(requestBody.UserID.Value, notificationMessage));
-            }
-
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {                   
+                {
+                    if (requestBody.UserID.HasValue)
+                    {
+                        var notificationMessage = $"{existingLaptop.AssetName} has been assigned to you";
+
+                        _ = Task.Run(() => notificationService.NotifyUser(requestBody.UserID.Value, notificationMessage));
+                    }
+
                     return TypedResults.Ok(new UpdateLaptopResponse(existingLaptop.Id));
                 }
             }
