@@ -208,7 +208,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 
         public async ValueTask NotifyIT(string adminMessage, CLMDbContext context)
         {
-            var adminList = await _context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
+            var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
 
             foreach (var user in adminList)
             {
