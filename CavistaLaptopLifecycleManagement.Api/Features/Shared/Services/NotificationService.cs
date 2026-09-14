@@ -2,9 +2,11 @@
 using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using CavistaLaptopLifecycleManagement.Api.Infrastructure.Emails;
+using CavistaLaptopLifecycleManagement.Api.Infrastructure.Worker;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Net.Mail;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 {
@@ -14,42 +16,52 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly MailService _mailService;
 
+        private readonly IBackgroundTaskQueue _taskQueue;
 
-        public NotificationService(IServiceProvider serviceProvider, MailService mailService)
+
+        public NotificationService(IServiceProvider serviceProvider, MailService mailService, IBackgroundTaskQueue taskQueue)
         {
             _serviceProvider = serviceProvider;
             _mailService = mailService;
+            _taskQueue = taskQueue;
         }
 
         public async ValueTask NotifyUser(Guid userId,string message)
         {
-            using var scope = _serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
             try
             {
-                var notificationToAdd = new Notification
+
+
+                _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
-                    UserId = userId,
-                    Message = message,
-                    IsRead = false,
-                    Created_At = DateTime.UtcNow,
-                    Modified = DateTime.UtcNow,
-                };
+                    using var scope = _serviceProvider.CreateScope();
+                    var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+
+                    var notificationToAdd = new Notification
+                    {
+                        UserId = userId,
+                        Message = message,
+                        IsRead = false,
+                        Created_At = DateTime.UtcNow,
+                        Modified = DateTime.UtcNow,
+                    };
 
 
-                await context.Notifications.AddAsync(notificationToAdd);
+                    await context.Notifications.AddAsync(notificationToAdd);
 
-                var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+                    var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
-                context.SaveChanges();
+                    context.SaveChanges();
 
-                if (user != null)
-                {
-                    var to = new List<string>() { user.EmailAddress };
-                    var emailMessage = new Message(to, $"Activity Notification", $"{message}");
-                    //await _mailService.SendEmailAsync(emailMessage);
-                }
-     
+                    if (user != null)
+                    {
+                        var to = new List<string>() { user.EmailAddress };
+                        var emailMessage = new Message(to, $"Activity Notification", $"{message}");
+
+                        await _mailService.SendEmailAsync(emailMessage);
+                    }       
+                });
+
             }
             catch (Exception ex)
             {
@@ -59,42 +71,49 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 
         public async ValueTask NotifyIT(string adminMessage)
         {
-            using var scope = _serviceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
-
-            var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
-
-            foreach (var user in adminList)
-            {
-                var attendantNotificationToAdd = new Notification
+            try
+            {               
+                _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
-                    UserId = user.Id,
-                    Message = adminMessage,
-                    IsRead = false,
-                    Created_At = DateTime.UtcNow,
-                    Modified = DateTime.UtcNow,
-                };
+                    using var scope = _serviceProvider.CreateScope();
+                    var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
 
-                await context.Notifications.AddAsync(attendantNotificationToAdd);
+                    var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
+
+                    foreach (var user in adminList)
+                    {
+                        var attendantNotificationToAdd = new Notification
+                        {
+                            UserId = user.Id,
+                            Message = adminMessage,
+                            IsRead = false,
+                            Created_At = DateTime.UtcNow,
+                            Modified = DateTime.UtcNow,
+                        };
+
+                        await context.Notifications.AddAsync(attendantNotificationToAdd);
+                    }
+
+                    var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
+
+                    if (adminEmailAddresses.Any())
+                    {
+                        var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
+
+                        //await _mailService.SendEmailAsync(attendantEmailMessage);
+
+                        await _mailService.SendEmailAsync(attendantEmailMessage);
+                    }
+
+
+                    context.SaveChanges();
+                });
             }
-
-            var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
-
-            if (adminEmailAddresses.Any())
+            catch (Exception ex)
             {
-                var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
-               
-                try
-                {
-                    //await _mailService.SendEmailAsync(attendantEmailMessage);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error($"An error occurred => {ex.Message}");
-                }
-            }
 
-            context.SaveChanges();
+                Log.Error($"An error occurred => {ex.Message}");
+            }          
         }
     }
 }

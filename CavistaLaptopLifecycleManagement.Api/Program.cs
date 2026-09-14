@@ -4,6 +4,7 @@ using CavistaLaptopLifecycleManagement.Api.Features.Shared;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Users.Services.Requirements;
 using CavistaLaptopLifecycleManagement.Api.Infrastructure.Exceptions;
+using CavistaLaptopLifecycleManagement.Api.Infrastructure.Worker;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -99,6 +100,9 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+builder.Services.AddHostedService<QueuedHostedService>();
 
 var app = builder.Build();
 
