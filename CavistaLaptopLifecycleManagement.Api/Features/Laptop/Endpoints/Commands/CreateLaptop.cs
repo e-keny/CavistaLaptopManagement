@@ -108,10 +108,19 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
 
             if (!string.IsNullOrWhiteSpace(requestBody?.Receipt))
             {
+                var base64 = requestBody.Receipt;
+
+                int commaIndex = base64.IndexOf(",");
+              
+                if (commaIndex >= 0)
+                {
+                    base64 = base64.Substring(commaIndex + 1);
+                }
+
                 var laptopReceiptToAdd = new LaptopReceipt
                 {
                     LaptopId = laptopToAdd.Id,
-                    Receipt = Convert.FromBase64String(requestBody?.Receipt ?? string.Empty),
+                    Receipt = Convert.FromBase64String(base64 ?? string.Empty),
                     Created_At = DateTime.UtcNow.ToUniversalTime(),
                     Modified = DateTime.UtcNow.ToUniversalTime()
                 };
