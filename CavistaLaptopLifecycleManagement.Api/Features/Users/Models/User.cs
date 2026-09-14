@@ -56,7 +56,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Users.Models
                     Price = x.Price,
                     LaptopNumber = x.LaptopNumber,
                     Currency = x.Currency,
-                    Receipt = x.Receipt,
+                    //Receipt = x.Receipt,
                     EstimationUsefulLifeYear = x.EstimationUsefulLifeYear,
                     DepreciationEstimationDate = x.DepreciationEstimationDate,
                     WarrantyExpirationDate = x.WarrantyExpirationDate,

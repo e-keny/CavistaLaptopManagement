@@ -25,8 +25,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Database.Entities
 
         public string Currency { get; set; }
 
-        public string Receipt { get; set; }
-
         public DateTimeOffset? EstimationUsefulLifeYear { get; set; }
 
         public DateTimeOffset? DepreciationEstimationDate { get; set; }

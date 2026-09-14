@@ -23,6 +23,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<LaptopReceipt> LaptopReceipts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("Users");
@@ -55,6 +57,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Database
 
             modelBuilder.Entity<Laptop>().
                     HasIndex(userLaptop => userLaptop.UserId, "Idx_Laptop_UserId");
+
+            modelBuilder.Entity<LaptopReceipt>().
+                   HasIndex(laptopReceipt => laptopReceipt.LaptopId, "Idx_LaptopReceipt_UserId");
         }
     }
 }

@@ -95,7 +95,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 Price = requestBody.Price,
                 LaptopNumber = requestBody.LaptopNumber,
                 Currency = requestBody?.Currency ?? "NGN",
-                Receipt = requestBody?.Receipt ?? string.Empty,
+                //Receipt = requestBody?.Receipt ?? string.Empty,
                 EstimationUsefulLifeYear = requestBody?.EstimationUsefulLifeYear.ToUniversalTime(),
                 DepreciationEstimationDate = requestBody?.DepreciationEstimationDate.ToUniversalTime(),
                 WarrantyExpirationDate = requestBody?.WarrantyExpirationDate.ToUniversalTime(),

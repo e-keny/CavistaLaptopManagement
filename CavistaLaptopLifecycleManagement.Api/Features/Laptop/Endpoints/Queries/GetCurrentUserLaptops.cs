@@ -53,7 +53,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Queries
                                   AssignedToEmail = curUser.EmailAddress,
                                   AssignedToName = curUser.FullName,
                                   Currency = userLaptop.Currency,
-                                  Receipt = userLaptop.Receipt,
+                                  //Receipt = userLaptop.Receipt,
                                   LaptopNumber = userLaptop.LaptopNumber
                               };
 
