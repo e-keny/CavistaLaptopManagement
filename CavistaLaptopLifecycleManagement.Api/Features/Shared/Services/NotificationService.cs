@@ -47,7 +47,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 {
                     var to = new List<string>() { user.EmailAddress };
                     var emailMessage = new Message(to, $"Activity Notification", $"{message}");
-                    await _mailService.SendEmailAsync(emailMessage);
+                    //await _mailService.SendEmailAsync(emailMessage);
                 }
      
             }
