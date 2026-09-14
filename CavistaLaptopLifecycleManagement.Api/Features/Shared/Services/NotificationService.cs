@@ -33,7 +33,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 
             await context.Notifications.AddAsync(notificationToAdd);
 
-            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
