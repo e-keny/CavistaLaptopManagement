@@ -20,7 +20,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             _mailService = mailService;
         }
 
-        public async ValueTask NotifyUser(Guid userId, string message)
+        public async ValueTask NotifyUser(Guid userId, string message, CLMDbContext context)
         {         
             var notificationToAdd = new Notification
             {
