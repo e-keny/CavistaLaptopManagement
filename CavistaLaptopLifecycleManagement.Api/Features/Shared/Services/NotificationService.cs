@@ -29,8 +29,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
         {
             try
             {
-
-
                 _taskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     using var scope = _serviceProvider.CreateScope();
@@ -44,7 +42,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                         Created_At = DateTime.UtcNow,
                         Modified = DateTime.UtcNow,
                     };
-
 
                     await context.Notifications.AddAsync(notificationToAdd);
 
@@ -102,13 +99,11 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     //    await _mailService.SendEmailAsync(attendantEmailMessage);
                     //}
 
-
                     context.SaveChanges();
                 });
             }
             catch (Exception ex)
             {
-
                 Log.Error($"An error occurred => {ex.Message}");
             }          
         }
