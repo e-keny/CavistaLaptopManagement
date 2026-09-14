@@ -9,6 +9,7 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Commands
@@ -155,7 +156,16 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints.Command
                         var notificationMessage = $"{existingLaptop.AssetName} has been assigned to you";
 
                         _ = Task.Run(() => notificationService.NotifyUser(requestBody.UserID.Value, notificationMessage));
-                    }
+
+
+                        //var user = await context.Users.Where(x => x.Id == requestBody.UserID.Value && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+
+                        //if (user != null)
+                        //{
+                        //    _ = await Task.Run(() => notificationService.NotifyUser(user.Id, user.EmailAddress, notificationMessage));
+                        //}
+                    }                
+
 
                     return TypedResults.Ok(new UpdateLaptopResponse(existingLaptop.Id));
                 }

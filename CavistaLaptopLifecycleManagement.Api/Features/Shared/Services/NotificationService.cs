@@ -11,50 +11,57 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
     [RegisterScoped]
     public class NotificationService
     {
-        private readonly CLMDbContext _context;
+        private readonly IServiceProvider _serviceProvider;
         private readonly MailService _mailService;
 
-        public NotificationService(CLMDbContext context, MailService mailService)
+
+        public NotificationService(IServiceProvider serviceProvider, MailService mailService)
         {
-            _context = context;
+            _serviceProvider = serviceProvider;
             _mailService = mailService;
         }
 
-        public async ValueTask NotifyUser(Guid userId, string message)
-        {         
-            var notificationToAdd = new Notification
+        public async ValueTask NotifyUser(Guid userId,string message)
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+            try
             {
-                UserId = userId,
-                Message = message,
-                IsRead = false,
-                Created_At = DateTime.UtcNow,
-                Modified = DateTime.UtcNow,
-            };
-
-            await _context.Notifications.AddAsync(notificationToAdd);
-
-            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
-
-            if (user != null)
-            {
-                var to = new List<string>() { user.EmailAddress };
-                var emailMessage = new Message(to, $"Activity Notification", $"{message}");
-
-                try
+                var notificationToAdd = new Notification
                 {
+                    UserId = userId,
+                    Message = message,
+                    IsRead = false,
+                    Created_At = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow,
+                };
+
+
+                await context.Notifications.AddAsync(notificationToAdd);
+
+                var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+
+                context.SaveChanges();
+
+                if (user != null)
+                {
+                    var to = new List<string>() { user.EmailAddress };
+                    var emailMessage = new Message(to, $"Activity Notification", $"{message}");
                     await _mailService.SendEmailAsync(emailMessage);
                 }
-                catch (Exception ex)
-                {
-                    Log.Error($"An error occurred => {ex.Message}");
-                }
+     
             }
-
-            _context.SaveChanges();
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred => {ex.Message}");
+            }
         }
 
         public async ValueTask NotifyAttendant(Guid attendantId, string message)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+
             var notificationToAdd = new Notification
             {
                 UserId = attendantId,
@@ -64,9 +71,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await _context.Notifications.AddAsync(notificationToAdd);
+            await context.Notifications.AddAsync(notificationToAdd);
 
-            var user = await _context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+            var user = await context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -83,11 +90,14 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }                
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public async ValueTask NotifyUserAndAttendant(Guid userId, string userMessage, Guid attendantId, string attendantMessage)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+
             var userNotificationToAdd = new Notification
             {
                 UserId = userId,
@@ -97,9 +107,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await _context.Notifications.AddAsync(userNotificationToAdd);
+            await context.Notifications.AddAsync(userNotificationToAdd);
 
-            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -125,9 +135,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await _context.Notifications.AddAsync(attendantNotificationToAdd);
+            await context.Notifications.AddAsync(attendantNotificationToAdd);
 
-            var attendUser = await _context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+            var attendUser = await context.Users.Where(x => x.Id == attendantId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (attendUser != null)
             {
@@ -145,12 +155,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public async ValueTask NotifyUserAndIT(Guid userId, string userMessage, string adminMessage)
         {
-            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+            using var scope = _serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+
+            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             var userNotificationToAdd = new Notification
             {
@@ -161,7 +174,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await _context.Notifications.AddAsync(userNotificationToAdd);
+            await context.Notifications.AddAsync(userNotificationToAdd);
 
             if (user != null)
             {
@@ -170,7 +183,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 await _mailService.SendEmailAsync(emailMessage);
             }
 
-            var adminList = await _context.Users.Where(x => x.Role == Role.Admin && !x.IsDeprecated).ToListAsync();
+            var adminList = await context.Users.Where(x => x.Role == Role.Admin && !x.IsDeprecated).ToListAsync();
 
             foreach (var adminUser in adminList)
             {
@@ -183,7 +196,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await _context.Notifications.AddAsync(attendantNotificationToAdd);
+                await context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -202,12 +215,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public async ValueTask NotifyIT(string adminMessage)
         {
-            var adminList = await _context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
+            using var scope = _serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<CLMDbContext>();
+
+            var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
 
             foreach (var user in adminList)
             {
@@ -220,7 +236,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await _context.Notifications.AddAsync(attendantNotificationToAdd);
+                await context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -239,7 +255,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
             }
 
-            _context.SaveChanges();
+            context.SaveChanges();
         }
     }
 }

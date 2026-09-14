@@ -139,7 +139,15 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             try
             {
                 if (await context.SaveChangesAsync() > 0)
-                {                 
+                {
+
+                    //var user = await context.Users.Where(x => x.Id == existingTicket.UserId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
+
+                    //if (user != null)
+                    //{
+                    //    _ =  Task.Run(() => notificationService.NotifyUser(user.Id, notificationMessage));
+                    //}
+
                     _ = Task.Run(() => notificationService.NotifyUser(existingTicket.UserId, notificationMessage));
 
                     return TypedResults.Ok(new UpdateTicketResponse(existingTicket.Id));
