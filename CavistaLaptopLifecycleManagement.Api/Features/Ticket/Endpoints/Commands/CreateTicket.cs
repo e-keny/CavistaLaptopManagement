@@ -113,7 +113,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                 {
                     var notificationMessage = $"There is an available ticket waiting to be treated";
 
-                    _ = Task.Run(() => notificationService.NotifyIT(notificationMessage, context));
+                    _ = Task.Run(() => notificationService.NotifyIT(notificationMessage));
 
                     return TypedResults.Ok(new CreateTicketResponse(ticketToAdd.Id));
                 }

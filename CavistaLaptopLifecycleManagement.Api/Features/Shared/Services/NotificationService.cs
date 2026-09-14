@@ -20,7 +20,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             _mailService = mailService;
         }
 
-        public async ValueTask NotifyUser(Guid userId, string message, CLMDbContext context)
+        public async ValueTask NotifyUser(Guid userId, string message)
         {         
             var notificationToAdd = new Notification
             {
@@ -31,9 +31,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 Modified = DateTime.UtcNow,
             };
 
-            await context.Notifications.AddAsync(notificationToAdd);
+            await _context.Notifications.AddAsync(notificationToAdd);
 
-            var user = await context.Users.Where(x => x.Id == userId && !x.IsDeprecated && !x.IsActive).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userId && !x.IsDeprecated && x.IsActive).FirstOrDefaultAsync();
 
             if (user != null)
             {
@@ -48,10 +48,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 {
                     Log.Error($"An error occurred => {ex.Message}");
                 }
-                
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public async ValueTask NotifyAttendant(Guid attendantId, string message)
@@ -206,9 +205,9 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
             _context.SaveChanges();
         }
 
-        public async ValueTask NotifyIT(string adminMessage, CLMDbContext context)
+        public async ValueTask NotifyIT(string adminMessage)
         {
-            var adminList = await context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
+            var adminList = await _context.Users.Where(x => x.Role == Role.IT && !x.IsDeprecated).ToListAsync();
 
             foreach (var user in adminList)
             {
@@ -221,7 +220,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                     Modified = DateTime.UtcNow,
                 };
 
-                await context.Notifications.AddAsync(attendantNotificationToAdd);
+                await _context.Notifications.AddAsync(attendantNotificationToAdd);
             }
 
             var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
@@ -240,7 +239,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }
