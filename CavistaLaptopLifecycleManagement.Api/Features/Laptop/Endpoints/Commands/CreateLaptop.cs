@@ -1,4 +1,5 @@
 ﻿using CavistaLaptopLifecycleManagement.Api.Database;
+using CavistaLaptopLifecycleManagement.Api.Database.Entities;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models;
 using CavistaLaptopLifecycleManagement.Api.Features.Laptop.Services;
 using CavistaLaptopLifecycleManagement.Api.Features.Shared.Services;
@@ -95,7 +96,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
                 Price = requestBody.Price,
                 LaptopNumber = requestBody.LaptopNumber,
                 Currency = requestBody?.Currency ?? "NGN",
-                //Receipt = requestBody?.Receipt ?? string.Empty,
                 EstimationUsefulLifeYear = requestBody?.EstimationUsefulLifeYear.ToUniversalTime(),
                 DepreciationEstimationDate = requestBody?.DepreciationEstimationDate.ToUniversalTime(),
                 WarrantyExpirationDate = requestBody?.WarrantyExpirationDate.ToUniversalTime(),
@@ -105,6 +105,19 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Endpoints
             };
 
             context.Laptops.Add(laptopToAdd);
+
+            if (!string.IsNullOrWhiteSpace(requestBody?.Receipt))
+            {
+                var laptopReceiptToAdd = new LaptopReceipt
+                {
+                    LaptopId = laptopToAdd.Id,
+                    Receipt = Convert.FromBase64String(requestBody?.Receipt ?? string.Empty),
+                    Created_At = DateTime.UtcNow.ToUniversalTime(),
+                    Modified = DateTime.UtcNow.ToUniversalTime()
+                };
+
+                context.LaptopReceipts.Add(laptopReceiptToAdd);
+            }
 
             await auditTrailService.AddAuditTrailAsync(context, user.Id, AuditTrailService.AuditAction.Create, AuditTrailService.AuditOn.Laptop, laptopToAdd.Id);
 

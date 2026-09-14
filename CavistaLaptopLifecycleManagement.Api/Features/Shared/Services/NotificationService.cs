@@ -6,7 +6,6 @@ using CavistaLaptopLifecycleManagement.Api.Infrastructure.Worker;
 using Immediate.Injections.Shared;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.Net.Mail;
 
 namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 {
@@ -53,13 +52,13 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 
                     context.SaveChanges();
 
-                    if (user != null)
-                    {
-                        var to = new List<string>() { user.EmailAddress };
-                        var emailMessage = new Message(to, $"Activity Notification", $"{message}");
+                    //if (user != null)
+                    //{
+                    //    var to = new List<string>() { user.EmailAddress };
+                    //    var emailMessage = new Message(to, $"Activity Notification", $"{message}");
 
-                        await _mailService.SendEmailAsync(emailMessage);
-                    }       
+                    //    await _mailService.SendEmailAsync(emailMessage);
+                    //}       
                 });
 
             }
@@ -96,14 +95,12 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
 
                     var adminEmailAddresses = adminList.Select(x => x.EmailAddress).ToList();
 
-                    if (adminEmailAddresses.Any())
-                    {
-                        var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
+                    //if (adminEmailAddresses.Any())
+                    //{
+                    //    var attendantEmailMessage = new Message(adminEmailAddresses, $"Activity Notification", $"{adminMessage}");
 
-                        //await _mailService.SendEmailAsync(attendantEmailMessage);
-
-                        await _mailService.SendEmailAsync(attendantEmailMessage);
-                    }
+                    //    await _mailService.SendEmailAsync(attendantEmailMessage);
+                    //}
 
 
                     context.SaveChanges();

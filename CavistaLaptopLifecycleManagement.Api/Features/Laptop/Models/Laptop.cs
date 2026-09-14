@@ -31,7 +31,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Laptop.Models
 
         public string Currency { get; set; }
 
-        public string Receipt { get; set; }
+        //public string Receipt { get; set; }
 
         public DateTimeOffset? EstimationUsefulLifeYear { get; set; }
 

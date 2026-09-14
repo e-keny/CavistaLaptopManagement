@@ -24,8 +24,6 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Shared.Services
                 }
                 return Convert.ToBase64String(ms.ToArray());
             }
-        }
-
-        //byte[] data = Convert.FromBase64String(base64String);
+        }   
     }
 }
