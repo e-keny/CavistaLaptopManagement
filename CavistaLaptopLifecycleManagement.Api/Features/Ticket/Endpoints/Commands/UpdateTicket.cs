@@ -148,7 +148,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
                     //    _ =  Task.Run(() => notificationService.NotifyUser(user.Id, notificationMessage));
                     //}
 
-                    _ = Task.Run(() => notificationService.NotifyUser(existingTicket.UserId, notificationMessage));
+                    await notificationService.NotifyUser(existingTicket.UserId, notificationMessage);
 
                     return TypedResults.Ok(new UpdateTicketResponse(existingTicket.Id));
                 }
