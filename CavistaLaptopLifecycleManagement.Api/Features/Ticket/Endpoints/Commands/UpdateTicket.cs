@@ -126,6 +126,7 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Command
             {
                 ticketHistoryToAdd.AssignedTo = CurrentUser.Id;
                 notificationMessage = $"Ticket was claimed by {CurrentUser.FullName}";
+                existingTicket.AssigneeId = CurrentUser.Id;
             }
             else
             {

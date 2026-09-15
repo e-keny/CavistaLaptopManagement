@@ -44,8 +44,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                  && (searchStringIsNullOrEmpty || ticket.TicketNumber.ToLower().Contains(searchString.ToLower()))
                                  join userLaptop in context.Laptops on ticket.LaptopId equals userLaptop.Id into laptopList
                                  from laptop in laptopList.DefaultIfEmpty()
-                                 join user in context.Users on ticket.UserId equals user.Id
-                                 where !user.IsDeprecated                                
+                                 join user in context.Users on ticket.AssigneeId equals user.Id into ownerList
+                                 from owner in ownerList.DefaultIfEmpty()                                                            
                                  join LaptopOwner in context.Users on ticket.UserId equals LaptopOwner.Id into laptopOwnerList
                                  from LaptopOwner in laptopOwnerList.DefaultIfEmpty()
                                  select new TicketCommentDetail
@@ -54,8 +54,8 @@ namespace CavistaLaptopLifecycleManagement.Api.Features.Ticket.Endpoints.Queries
                                      UserLaptopID = laptop != null ? laptop.Id : null,
                                      Id = ticket.Id,
                                      Comment = ticket.Comment,
-                                     AssignedTo = user.FirstName,
-                                     AssignedToEmail = user.EmailAddress,
+                                     AssignedTo = owner != null ? owner.FirstName : null,
+                                     AssignedToEmail = owner != null ? owner.EmailAddress : null,
                                      OwnerId = LaptopOwner != null ? LaptopOwner.Id : null,
                                      OwnerName = LaptopOwner != null ? $"{LaptopOwner.FirstName}  {LaptopOwner.LastName}" : string.Empty,
                                      TicketStatus = ticket.TicketStatus
