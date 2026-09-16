@@ -1,11 +1,17 @@
 @page
 @model TestCavistaIdentityServer.Pages.Account.Login.Index
 
-<div class="login-page">
+@* <div class="login-page">
     <div class="lead">
         <h1>Login</h1>
         <p>Choose how to login</p>
-    </div>
+    </div> *@
+
+<div class="login-page">
+        <div class="card-header">
+            <h3 class="fw-bold">Welcome Back</h3>
+            <p class="text-muted">Please login to your account</p>
+     </div>
 
     <partial name="_ValidationSummary" />
 
@@ -14,10 +20,10 @@
         @if (Model.View.EnableLocalLogin)
         {
             <div class="col-sm-6">
-                <div class="card">
+               <div class="card">
                     <div class="card-header">
-                        <h2>Local Account</h2>
-                    </div>
+                        <h2>Account</h2>
+                    </div> 
 
                     <div class="card-body">
                         <form asp-page="/Account/Login/Index">
@@ -52,7 +58,7 @@
             </div>
         }
 
-        @if (Model.View.VisibleExternalProviders.Any())
+@*         @if (Model.View.VisibleExternalProviders.Any())
         {
             <div class="col-sm-6">
                 <div class="card">
@@ -76,7 +82,7 @@
                     </div>
                 </div>
             </div>
-        }
+        } *@
 
         @if (!Model.View.EnableLocalLogin && !Model.View.VisibleExternalProviders.Any())
         {
